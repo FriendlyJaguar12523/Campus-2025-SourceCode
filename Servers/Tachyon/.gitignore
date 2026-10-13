@@ -1,0 +1,33 @@
+# ---- reference sources ----
+# Nested clones of public upstream repos, consulted while writing docs/ngo-litenetlib-wire.md.
+# Nothing builds against these - re-create with the README commands if you need to re-check the
+# spec against upstream. vendor/LiteNetLibPP is DIFFERENT: it is a pinned git SUBMODULE (the C++
+# transport the server builds against), tracked via .gitmodules; the marker-layer patch in
+# patches/ is applied to it at configure time.
+vendor/litenetlib/
+vendor/ngo/
+vendor/mcc/
+
+# ---- C++ build output ----
+build/
+build-*/
+
+# ---- captures and logs ----
+# traffic.txt is deliberately tracked; ad-hoc captures and probe logs are not.
+*.log
+capture-*.txt
+traffic-*.txt
+# NGO batch captures contain the client's (encrypted) auth blobs - keep them local.
+ngo-batch*.txt
+
+# ---- python ----
+__pycache__/
+*.py[cod]
+
+# ---- editors / os ----
+.vs/
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store

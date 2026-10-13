@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Campus</title>
+  <link rel="icon" type="image/png" href="assets/cat-icon.png">
+  <link rel="apple-touch-icon" href="assets/cat-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=20260927c" />
+</head>
+<body class="home">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ───── TOP BAR ───── -->
+  <header class="topbar">
+    <div class="top-left">
+      <button class="side-toggle" id="burger" aria-label="Open menu">
+        <img src="assets/cat-icon.png" alt="Menu" class="burger-cat" id="burgerCat">
+      </button>
+    </div>
+
+    <div class="top-right">
+      <button class="icon-btn" id="searchBtn" aria-label="Search">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.7" y2="16.7"/></svg>
+      </button>
+      <button class="icon-btn notif-btn" id="notifBtn" aria-label="Notifications">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+        <span class="notif-badge hidden" id="notifBadge"></span>
+      </button>
+      <a href="/login" class="btn-login">Log in</a>
+      <a href="/download" class="btn-dl">DOWNLOAD</a>
+    </div>
+  </header>
+
+  <!-- CAT DRAWER -->
+  <aside class="cat-drawer" id="catDrawer">
+    <nav class="cd-nav">
+      <a href="/">Home</a>
+      <a href="/rooms">Rooms</a>
+      <a href="/messages">Messages</a>
+      <a href="#feed">Creative Program</a>
+      <a href="/patch-notes">Patch Notes</a>
+      <a href="/support">Support</a>
+      <a href="/news">News</a>
+      <a href="/challenges">Challenges</a>
+      <a href="/download">Download</a>
+      <a href="https://discord.gg/xH8MMwK5Bk" target="_blank" rel="noopener">Discord</a>
+      <a href="/accessibility">Accessibility</a>
+    </nav>
+    <button class="cd-theme-toggle"></button>
+  </aside>
+  <div class="side-scrim" id="scrim"></div>
+
+  <main id="main" class="home-main">
+
+    <!-- ───── HERO ───── -->
+    <section class="home-hero" aria-label="Welcome">
+      <svg class="hero-wave hero-wave-back" viewBox="0 0 1440 320" preserveAspectRatio="none" aria-hidden="true"><path d="M0,96 C240,180 420,40 720,120 C1020,200 1200,60 1440,140 L1440,320 L0,320 Z"/></svg>
+      <svg class="hero-wave hero-wave-front" viewBox="0 0 1440 320" preserveAspectRatio="none" aria-hidden="true"><path d="M0,200 C260,120 480,260 760,180 C1040,100 1240,220 1440,170 L1440,320 L0,320 Z"/></svg>
+      <div class="hero-inner">
+        <h1 class="hero-title"><span id="heroOnline">Players are</span> online right now in Campus!</h1>
+        <a href="/download" class="hero-dl">DOWNLOAD</a>
+      </div>
+    </section>
+
+    <!-- ───── FEATURES ───── -->
+    <section class="home-features" aria-label="About Campus">
+      <div class="hf">
+        <div class="hf-img" style="background-position:2% 50%;background-size:400%"></div>
+        <h3 class="hf-title">Cross-platform</h3>
+        <p class="hf-text">Campus is cross-platform, free, and can be played with or without a VR headset. Hang out with friends from all around the world across all devices!</p>
+      </div>
+      <div class="hf">
+        <div class="hf-img" style="background-position:5% 90%;background-size:300%"></div>
+        <h3 class="hf-title">Create</h3>
+        <p class="hf-text">Discover thousands of player-created rooms or build your own rooms with friends. With new rooms being added daily, you'll never run out of things to do!</p>
+      </div>
+      <div class="hf">
+        <div class="hf-img" style="background-position:100% 50%;background-size:400%"></div>
+        <h3 class="hf-title">Compete</h3>
+        <p class="hf-text">Grab a paintball gun and get ready to dive for cover! Try Capture the Flag or Team Battle on multiple super-fun maps. Plenty of customization options to keep the action fresh!</p>
+      </div>
+      <div class="hf">
+        <div class="hf-img" style="background-position:100% 90%;background-size:300%"></div>
+        <h3 class="hf-title">Cooperate</h3>
+        <p class="hf-text">Team up with your friends and arm yourselves with laser guns. It'll take teamwork and high-fives to defeat Jumbotron and his army of robots.</p>
+      </div>
+    </section>
+
+    <!-- ───── FEED LAYOUT ───── -->
+    <div class="feed-layout">
+
+      <!-- LEFT RAIL: ROOMS -->
+      <div class="rail-col">
+        <a href="/rooms" class="hot-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c1 4 5 5 5 10a5 5 0 0 1-10 0c0-2 1-3 1-3s1 2 2 2c0-3 1-5 2-9z"/></svg>
+          View hot rooms
+        </a>
+        <div class="rail-box">
+          <div class="rail-box-head">
+            <strong>Top Rooms</strong>
+            <span>Rooms provided by <a href="#feed">Campus Creative Program</a></span>
+          </div>
+          <aside class="rail" id="rooms">
+            <h3 class="rail-title">Top Rooms</h3>
+            <a href="/room/whisker-heights" class="rail-item">
+              <div class="rail-thumb" style="--a:#ff5a3c;--b:#ffb142"></div>
+              <div class="rail-meta"><span class="rail-name">^Whisker Heights</span><span class="rail-by">@clawful</span></div>
+            </a>
+            <a href="/room/midnight-mews" class="rail-item">
+              <div class="rail-thumb" style="--a:#f0453f;--b:#ff8a5c"></div>
+              <div class="rail-meta"><span class="rail-name">^Midnight Mews</span><span class="rail-by">@velvetpaw</span></div>
+            </a>
+            <a href="/room/litterbox-lab" class="rail-item">
+              <div class="rail-thumb" style="--a:#ff6b9d;--b:#ffc371"></div>
+              <div class="rail-meta"><span class="rail-name">^Litterbox Lab</span><span class="rail-by">@tinker9</span></div>
+            </a>
+            <a href="/room/yarn-quest" class="rail-item">
+              <div class="rail-thumb" style="--a:#e84393;--b:#ff7f6e"></div>
+              <div class="rail-meta"><span class="rail-name">^Yarn Quest</span><span class="rail-by">@stitchwitch</span></div>
+            </a>
+            <a href="/room/deep-dive-reef" class="rail-item">
+              <div class="rail-thumb" style="--a:#c44569;--b:#ff7f50"></div>
+              <div class="rail-meta"><span class="rail-name">^Deep Dive Reef</span><span class="rail-by">@bubbles</span></div>
+            </a>
+            <a href="/room/haunted-cattery" class="rail-item">
+              <div class="rail-thumb" style="--a:#d63031;--b:#ff7675"></div>
+              <div class="rail-meta"><span class="rail-name">^Haunted Cattery</span><span class="rail-by">@spooky.tom</span></div>
+            </a>
+          </aside>
+        </div>
+      </div>
+
+      <!-- CENTER FEED -->
+      <section class="feed" id="feed">
+
+        <h2 class="feed-title">Take a look at what's happening right now in Campus</h2>
+
+        <!-- featured rooms slideshow -->
+        <div class="featured-slideshow" id="featuredSlideshow"></div>
+
+        <!-- quick links: patch notes / weekly / news -->
+        <div class="home-links">
+          <a href="/patch-notes" class="home-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h6"/></svg>
+            <span>Patch Notes</span>
+          </a>
+          <a href="/support" class="home-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <span>Support</span>
+          </a>
+          <a href="/news" class="home-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h13v14a1 1 0 0 1-1 1H4z"/><path d="M17 8h2a1 1 0 0 1 1 1v9a2 2 0 0 1-2 2"/><path d="M8 9h5M8 13h5M8 17h3"/></svg>
+            <span>News</span>
+          </a>
+        </div>
+
+        <!-- Posts are rendered here by app.js (from the photos API, with a fallback) -->
+        <div id="postList">
+          <div class="feed-loading">Loading recent photos…</div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- SEARCH PANEL -->
+  <div class="search-panel" id="searchPanel">
+    <div class="search-card">
+      <div class="search-tabs">
+        <button class="stab active" data-tab="people">People</button>
+        <button class="stab" data-tab="rooms">Rooms</button>
+      </div>
+      <div class="search-field">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.7" y2="16.7"/></svg>
+        <input type="text" id="searchInput" placeholder="Search people…" autocomplete="off">
+      </div>
+      <div class="search-results" id="searchResults"></div>
+    </div>
+  </div>
+  <div class="search-scrim" id="searchScrim"></div>
+
+  <script src="data.js?v=20260927c"></script>
+  <script src="app.js?v=20260927c"></script>
+</body>
+</html>

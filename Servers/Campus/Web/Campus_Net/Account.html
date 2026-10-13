@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>My Account | Campus</title>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<style>
+:root {
+  --bg: #0f0a1a;
+  --panel: rgba(31, 20, 54, 0.85);
+  --border: rgba(155, 92, 255, 0.35);
+  --accent: #9b5cff;
+  --accent-2: #ff5cad;
+  --text: #f5efff;
+  --muted: #a99bcf;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Rubik, sans-serif;
+  background: radial-gradient(ellipse at top, #241540 0%, var(--bg) 70%);
+  color: var(--text);
+  min-height: 100vh;
+}
+.wrap { max-width: 720px; margin: 0 auto; padding: 40px 20px; }
+h1 {
+  background: linear-gradient(90deg, var(--accent), var(--accent-2), #ffcd5c);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 2rem;
+  margin: 0 0 20px 0;
+}
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 16px;
+  backdrop-filter: blur(6px);
+}
+.row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
+.row:last-child { border-bottom: 0; }
+.k { color: var(--muted); }
+.v { color: var(--text); font-weight: 500; word-break: break-all; }
+.pic { width: 96px; height: 96px; border-radius: 50%; border: 3px solid var(--accent); object-fit: cover; margin-bottom: 12px; }
+a { color: var(--accent-2); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.nav { margin-top: 20px; font-size: 0.9rem; }
+.empty { color: var(--muted); font-style: italic; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>My Account</h1>
+  <div id="loading" class="card">Loading…</div>
+  <div id="content" style="display:none">
+    <div class="card">
+      <img id="pic" class="pic" alt=""/>
+      <div id="displayName" style="font-size:1.4rem;font-weight:600"></div>
+      <div id="username" class="k"></div>
+    </div>
+    <div class="card">
+      <div class="row"><span class="k">Account ID</span><span class="v" id="accId"></span></div>
+      <div class="row"><span class="k">Level</span><span class="v" id="lvl"></span></div>
+      <div class="row"><span class="k">XP</span><span class="v" id="xp"></span></div>
+      <div class="row"><span class="k">Created</span><span class="v" id="created"></span></div>
+      <div class="row"><span class="k">Discord ID</span><span class="v" id="discord"></span></div>
+      <div class="row"><span class="k">Dorm</span><span class="v" id="dorm"></span></div>
+    </div>
+    <div class="card">
+      <div class="k">Bio</div>
+      <div class="v" id="bio" style="margin-top:6px"></div>
+    </div>
+  </div>
+  <div class="nav">
+    <a href="/campus_net/home">&larr; Home</a> &middot;
+    <a href="/campus_net/online_players">Online Players</a> &middot;
+    <a href="/campus_net/logout">Log out</a>
+  </div>
+</div>
+<script>
+fetch("/campus_net/account/me/data", { credentials: "same-origin" })
+  .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+  .then(a => {
+    document.getElementById("loading").style.display = "none";
+    document.getElementById("content").style.display = "block";
+    document.getElementById("pic").src = a.profileImage || "/admin-assets/placeholder.png";
+    document.getElementById("displayName").textContent = a.displayName || "(no name)";
+    document.getElementById("username").textContent = "@" + (a.username || "");
+    document.getElementById("accId").textContent = a.accountId;
+    document.getElementById("lvl").textContent = a.level;
+    document.getElementById("xp").textContent = a.xp;
+    document.getElementById("created").textContent = a.createdAt;
+    document.getElementById("discord").textContent = a.discordId && a.discordId !== "0" ? a.discordId : "(not linked)";
+    document.getElementById("dorm").textContent = a.dormRoomId || "1";
+    const bio = (a.bio || "").trim();
+    document.getElementById("bio").innerHTML = bio ? bio.replace(/</g,"&lt;") : "<span class='empty'>This player hasn't written a bio yet.</span>";
+  })
+  .catch(() => {
+    document.getElementById("loading").innerHTML =
+      "You're not logged in. <a href='/campus_net/login'>Log in</a> first.";
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+# RecFlare Quest hook config.
+#
+# Copy this to `recflare.cfg` in the repo root and edit. scripts/build-hook.sh bakes it
+# into libvrsupport.so at build time, so the values ship inside the APK -- no device
+# file needed. (The same file can optionally be pushed to
+# /sdcard/Android/data/net.recflare.RecFlare/files/recflare.cfg at runtime to override.)
+#
+# Keys match the PC BepInEx plugin's names so a PC config can be reused. Anything not
+# listed here uses the compiled-in default. Blank value = use default (except Oculus
+# App Id, where blank disables the override). '#' comments; [sections] are ignored.
+
+[App]
+
+# Android package name for the sideloaded client. Kept distinct from the store app
+# (com.AgainstGravity.RecRoom) so both can be installed side by side. Used at build
+# time for the manifest rename, and for the on-device runtime-config path.
+Package Name = net.recflare.RecFlare
+
+[Server]
+
+# RecNet name server. The client's ns.rec.net requests are rewritten to this host.
+# Accepts a bare host or a full URL (only the host is used).
+RecNet NameServer Host = ns.recflare.net
+
+# Oculus App ID. This key selects which of two builds you are making.
+#
+#   SET   -- the Meta build. The platform is initialized against your own registered app and
+#            Meta's real entitlement and login flow runs end to end.
+#
+#   BLANK -- the no-Meta-account build, for players who don't have (or don't want) a Meta
+#            account. The client keeps Rec Room's own app id, which Meta refuses, so the
+#            platform hooks are armed to steer it to its own username/password login. They
+#            authenticate nothing: the user id is the sentinel 1 and the nonce is a fixed
+#            unverifiable string, and the server is expected to REJECT them -- that is what
+#            makes the client fall through to credentials.
+#            Server-side: exclude platform id 1 from platform authentication. Every no-Meta
+#            client sends the same id, so accepting it merges them into one account.
+#
+# See README -> "Oculus App Id - which build you get" (rationale in CLAUDE.md).
+#
+# Note: this does NOT affect the OBB filename -- that is main.<versionCode>.<package>.obb,
+# driven by the package name and versionCode, not the App ID.
+Oculus App Id =
+
+[Photon]
+
+# Photon App IDs from your own Photon dashboard. These are credentials, so there are no
+# built-in defaults -- leave one blank and the client keeps the value baked into the game
+# (which points at Rec Room's dead Photon apps, so multiplayer won't connect).
+# Photon Realtime App ID
+App Id Realtime =
+
+# Photon Voice App ID
+App Id Voice =
+
+# Photon Chat App ID
+App Id Chat =
+
+# Custom Photon NameServer host (blank = Photon Cloud)
+Photon NameServer =
+
+# Custom Photon NameServer port (0 = Photon default)
+Photon NameServer Port = 0
+
+[Advanced]
+
+# One logcat line per request and per response, under the RECFLARE tag:
+#   [http]   POST https://api.recflare.net/...
+#   [http<-] 200  https://api.recflare.net/...
+# Non-2xx response bodies are always shown, so a Cloudflare challenge page can be told
+# apart from your server's own JSON.
+Log HTTP = true
+
+# Full HTTP tracing: adds the request body and *every* response body, not just failures.
+# Bodies are rendered as text when the content type (or a content sniff) says so, and as a
+# printable preview with \xNN escapes otherwise, so multipart framing stays readable.
+# Same key and meaning as the PC plugin's [Advanced] Debug.
+# WARNING: this logs passwords and auth tokens. Be careful sharing these logs.
+Debug = false
+
+# Cap on a single logged body, in characters. The excess is noted, not silently dropped.
+Log HTTP Body Max = 10000
+
+# By default telemetry/heartbeat endpoints (gamesight, /data/heartbeat, /identify,
+# /httpapi, /data/event) are left out because they drown everything else. Set true to
+# include them.
+Log Noisy Endpoints = false

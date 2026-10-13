@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Account · Campus</title>
+  <link rel="icon" type="image/png" href="assets/cat-icon.png">
+  <link rel="apple-touch-icon" href="assets/cat-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=20260927c" />
+</head>
+<body class="login-page">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <main id="main" class="login-wrap">
+    <a href="/" class="login-card-logo">
+      <span class="cat-shift"><img src="assets/cat-icon.png" alt="Campus" class="login-cat"
+        onerror="this.outerHTML='<span class=logo-text style=font-size:2rem>campus</span>'"></span>
+      <span class="brand-wrap"><span class="login-brand">Campus</span></span>
+    </a>
+
+    <div class="login-card">
+      <h1>Create your account</h1>
+      <p class="login-sub">One Campus account, one device. Sign in with it in-game.</p>
+
+      <form id="signupForm" autocomplete="on">
+        <label class="field">
+          <span>Username (your @ and display name)</span>
+          <input id="suUser" type="text" placeholder="yourname" autocomplete="username"
+                 maxlength="20" spellcheck="false" autocapitalize="none">
+        </label>
+        <label class="field">
+          <span>Date of birth</span>
+          <input id="suDob" type="date" autocomplete="bday" required>
+        </label>
+        <label class="field">
+          <span>Password</span>
+          <input id="suPass" type="password" placeholder="••••••••" autocomplete="new-password">
+        </label>
+        <label class="field">
+          <span>Re-enter password</span>
+          <input id="suConfirm" type="password" placeholder="••••••••" autocomplete="new-password">
+        </label>
+        <label class="field">
+          <span>Email <span class="field-optional">(optional)</span></span>
+          <input id="suEmail" type="email" placeholder="you@example.com" autocomplete="email">
+        </label>
+
+        <!-- honeypot: hidden from humans, trips naive bots. Do not remove. -->
+        <div aria-hidden="true" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden">
+          <label>Website<input id="suWebsite" type="text" tabindex="-1" autocomplete="off"></label>
+        </div>
+
+        <p class="login-error" id="signupError"></p>
+
+        <button type="submit" class="btn-dl login-submit">Create account</button>
+      </form>
+
+      <p class="login-foot">Already have an account? <a href="/login">Log in</a></p>
+    </div>
+
+    <a href="/" class="dl-back">← Back to home</a>
+  </main>
+
+  <script src="data.js?v=20260927c"></script>
+  <script src="app.js?v=20260927c"></script>
+</body>
+</html>

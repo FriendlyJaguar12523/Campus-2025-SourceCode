@@ -1,0 +1,36 @@
+# Build artifacts
+*.so
+*.apk
+*.apk.idsig
+*.o
+*.a
+
+# Signing keys — never commit
+*.keystore
+*.jks
+*.p12
+
+# Copyrighted game assets — user-supplied, never commit
+libil2cpp.so
+global-metadata.dat*
+*.obb
+recflare-pure/
+dump/
+dump2/
+
+# Build output (decoded project + signed APK — contains game assets)
+build/
+
+# Toolchains / large deps (apktool.jar, zipalign, apksigner, debug.keystore live here)
+ndk/
+android-ndk-*/
+/tools
+/tools/
+
+# Local config (may contain your own IDs)
+recflare.cfg
+
+# Scratch
+*.log
+scratchpad/
+__pycache__/

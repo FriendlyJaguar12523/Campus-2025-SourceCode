@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Campus &middot; Custom Rec Room 2025 Server</title>
+    <meta name="description" content="Campus is a custom Rec Room 2025 server built by Kyle." />
+    <meta name="keywords" content="Campus, Rec Room private server, Rec Room 2025, custom rec room" />
+    <link rel="canonical" href="https://camprec.net" />
+    <link rel="icon" href="/admin-assets/AnimatedIcon.png" type="image/png">
+    <meta property="og:title" content="Campus &middot; Custom Rec Room 2025 Server" />
+    <meta property="og:description" content="Campus is a custom Rec Room 2025 server. Join and explore." />
+    <meta property="og:url" content="https://camprec.net" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://camprec.net/admin-assets/Cutout.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Campus &middot; Custom Rec Room 2025" />
+    <meta name="twitter:description" content="Custom Rec Room 2025 server built by Kyle." />
+    <meta name="twitter:image" content="https://camprec.net/admin-assets/Cutout.png" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#791B8D" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --purple:  #791B8D;
+            --magenta: #BF2966;
+            --orange:  #F95D24;
+            --gold:    #FA9912;
+            --ink:     #150a1e;
+        }
+        * { box-sizing: border-box; }
+        html, body { margin: 0; padding: 0; }
+        body {
+            font-family: 'Rubik', system-ui, sans-serif;
+            color: #fff;
+            min-height: 100vh;
+            /* Same 4-stop sunset ramp as the login page + UIGradient recolor patch. */
+            background: linear-gradient(135deg, var(--purple) 0%, var(--magenta) 40%, var(--orange) 75%, var(--gold) 100%) fixed;
+            opacity: 0;
+            animation: bodyFade 0.6s ease forwards;
+            overflow-x: hidden;
+        }
+        @keyframes bodyFade { to { opacity: 1; } }
+
+        /* AnimatedIcon tile watermark drifting behind everything (same treatment as
+           the admin panel). 8% opacity keeps it subtle. */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: -40vmax;
+            background-image: url('/admin-assets/AnimatedIcon.png');
+            background-repeat: repeat;
+            background-size: 150px 150px;
+            transform: rotate(-8deg);
+            opacity: 0.08;
+            pointer-events: none;
+            z-index: 0;
+            animation: driftPattern 60s linear infinite;
+        }
+        @keyframes driftPattern {
+            from { background-position: 0 0; }
+            to   { background-position: 300px 300px; }
+        }
+
+        /* ---- Layout wrappers ---- */
+        .nav, .hero, .content, .footer { position: relative; z-index: 1; }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 32px;
+            background: rgba(21, 10, 30, 0.55);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255,255,255,0.10);
+        }
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 20px;
+            letter-spacing: 0.5px;
+        }
+        .brand img { width: 32px; height: 32px; }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 22px;
+        }
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14.5px;
+            opacity: 0.85;
+            transition: opacity .15s;
+        }
+        .nav-links a:hover { opacity: 1; }
+        .nav-links .cta {
+            padding: 8px 16px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, var(--purple), var(--orange));
+            box-shadow: 0 6px 16px rgba(249,93,36,0.35);
+            font-weight: 600;
+            opacity: 1;
+            transition: transform .1s, box-shadow .15s;
+        }
+        .nav-links .cta:hover { transform: translateY(-1px); box-shadow: 0 10px 22px rgba(249,93,36,0.45); }
+
+        /* ---- Hero ---- */
+        .hero {
+            text-align: center;
+            padding: 70px 24px 40px;
+        }
+        .hero img.cutout {
+            display: block;
+            width: 220px;
+            max-width: 60vw;
+            margin: 0 auto 28px;
+            filter: drop-shadow(0 10px 28px rgba(0,0,0,.45));
+        }
+        .hero h1 {
+            font-family: 'Rubik', sans-serif;
+            font-weight: 700;
+            font-size: clamp(32px, 5vw, 52px);
+            margin: 0 0 12px;
+            letter-spacing: 0.5px;
+        }
+        .hero .sub {
+            font-size: clamp(15px, 1.5vw, 18px);
+            opacity: 0.85;
+            max-width: 620px;
+            margin: 0 auto;
+        }
+        .hero .sub b { color: #fff; font-weight: 700; }
+
+        /* ---- Feature cards ---- */
+        .content {
+            max-width: 900px;
+            margin: 40px auto 60px;
+            padding: 0 24px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 18px;
+        }
+        .card {
+            background: rgba(21, 10, 30, 0.55);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.14);
+            border-radius: 16px;
+            padding: 20px 22px;
+            transition: transform .12s, border-color .15s;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255,255,255,0.28);
+        }
+        .card h3 {
+            margin: 0 0 8px;
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .card p {
+            margin: 0;
+            font-size: 14px;
+            opacity: 0.8;
+            line-height: 1.45;
+        }
+        .card .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .dot.purple  { background: var(--purple); }
+        .dot.magenta { background: var(--magenta); }
+        .dot.orange  { background: var(--orange); }
+        .dot.gold    { background: var(--gold); }
+
+        /* ---- Footer ---- */
+        .footer {
+            text-align: center;
+            font-size: 12.5px;
+            opacity: 0.55;
+            padding: 24px 20px 40px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="brand">
+            <img src="/admin-assets/AnimatedIcon.png" alt="">
+            Campus
+        </div>
+        <div class="nav-links">
+            <a href="/admin/v4/login">Admin</a>
+            <a href="#" onclick="return false;">Discord</a>
+            <a href="/admin/v4/login" class="cta">Log in</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <img class="cutout" src="/admin-assets/Cutout.png" alt="Campus"
+             onerror="this.style.display='none'">
+        <h1>Welcome to Campus</h1>
+        <p class="sub"><b>Campus</b> is a custom <b>Rec Room 2025</b> server built by <b>Kyle</b>.</p>
+    </section>
+
+    <section class="content">
+        <div class="card">
+            <h3><span class="dot purple"></span> All Items Unlocked</h3>
+            <p>Every outfit, food and weapon skin, no paywalls, no grind.</p>
+        </div>
+        <div class="card">
+            <h3><span class="dot magenta"></span> Active Community</h3>
+            <p>Live events, hangouts and Discord tournaments.</p>
+        </div>
+        <div class="card">
+            <h3><span class="dot orange"></span> No Paywalls</h3>
+            <p>Everything is open, fair and free for everyone.</p>
+        </div>
+        <div class="card">
+            <h3><span class="dot gold"></span> Frequent Updates</h3>
+            <p>New features and content added regularly.</p>
+        </div>
+    </section>
+
+    <footer class="footer">
+        &copy; 2026 Campus &middot; Not affiliated with Rec Room or Against Gravity.
+    </footer>
+</body>
+</html>

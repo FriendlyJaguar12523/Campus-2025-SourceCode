@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Dev|x64">
+      <Configuration>Dev</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{713dc2ca-a653-4917-b89b-fdd0e84000ff}</ProjectGuid>
+    <RootNamespace>My2025Patch</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>2025Patch</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Dev|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.props" />
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Dev|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;MY2025Patch_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+          <AdditionalIncludeDirectories>$(ProjectDir)src\RR\imgui;$(ProjectDir)src\Discord\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+</ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;MY2025Patch_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+          <AdditionalIncludeDirectories>$(ProjectDir)src\RR\imgui;$(ProjectDir)src\Discord\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+</ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <!-- Notes on this weird set of defines:
+             * _DEBUG is INTENTIONALLY OMITTED. It would make the CRT call the debug-heap
+               variants (_malloc_dbg / _calloc_dbg / _free_dbg / _CrtDbgReport) which only
+               exist in msvcrtd.dll. We're linking /MD (release CRT) below, so those symbols
+               are missing and we'd get LNK2001/LNK2019 on every allocation.
+             * PATCH_DEBUG is our own gate for anti-cheat log visibility etc. Use this in
+               source instead of _DEBUG. See src\Protections\AntiLog.h.
+             * _ITERATOR_DEBUG_LEVEL=0 matches the prebuilt discord-rpc.lib's iterator debug
+               setting so LNK2038 doesn't fire on the CRT flag check. -->
+      <PreprocessorDefinitions>PATCH_DEBUG;MY2025Patch_EXPORTS;_WINDOWS;_USRDLL;_ITERATOR_DEBUG_LEVEL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <!-- Match discord-rpc.lib's CRT (Release DLL) instead of Debug DLL. Same reason -
+           the third-party lib only ships one flavour and won't link against MDd. You keep
+           PDBs and stepping; only the CRT's iterator/heap debug checks go away. -->
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+          <AdditionalIncludeDirectories>$(ProjectDir)src\RR\imgui;$(ProjectDir)src\Discord\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+</ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;MY2025Patch_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir)src\RR\imgui;$(ProjectDir)src\Discord\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <Optimization>MaxSpeed</Optimization>
+      <StringPooling>true</StringPooling>
+      <!-- No debug database in the shipped DLL: nothing for a symbol server / reverser to read. -->
+      <DebugInformationFormat>None</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <!-- Strip the PDB / debug directory so symbol names don't ship with the release DLL. -->
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+      <AdditionalLibraryDirectories>$(ProjectDir)src\Discord\discord-rpc-win\discord-rpc\win64-dynamic\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>discord-rpc.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dev|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;CAMPUS_DEV_BUILD;MY2025Patch_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir)src\RR\imgui;$(ProjectDir)src\Discord\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <Optimization>Disabled</Optimization>
+      <StringPooling>true</StringPooling>
+      <!-- Dev: a debug database, so a debugger can step through it (the Release DLL ships without one). -->
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <!-- Dev: keep the PDB. -->
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+      <AdditionalLibraryDirectories>$(ProjectDir)src\Discord\discord-rpc-win\discord-rpc\win64-dynamic\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>discord-rpc.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Discord\DiscordRPC_Presence.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\RR\Imgui\backends\imgui_impl_dx11.cpp" />
+    <ClCompile Include="src\RR\Imgui\backends\imgui_impl_win32.cpp" />
+    <ClCompile Include="src\RR\Imgui\imgui.cpp" />
+    <ClCompile Include="src\RR\Imgui\imgui_draw.cpp" />
+    <ClCompile Include="src\RR\Imgui\imgui_tables.cpp" />
+    <ClCompile Include="src\RR\Imgui\imgui_widgets.cpp" />
+    <ClCompile Include="src\RR\Patching\UIThemes.cpp" />
+    <ClCompile Include="src\RR\Patching\PatchProof.cpp" />
+    <ClCompile Include="src\RR\UnityExplorer\imgui_inspector.cpp" />
+    <ClCompile Include="src\Utils\deps\minhook\src\buffer.c" />
+    <ClCompile Include="src\Utils\deps\minhook\src\hde\hde32.c" />
+    <ClCompile Include="src\Utils\deps\minhook\src\hde\hde64.c" />
+    <ClCompile Include="src\Utils\deps\minhook\src\hook.c" />
+    <ClCompile Include="src\Utils\deps\minhook\src\trampoline.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Discord\discord-rpc-win\discord-rpc\win64-dynamic\include\discord_register.h" />
+    <ClInclude Include="src\Discord\discord-rpc-win\discord-rpc\win64-dynamic\include\discord_rpc.h" />
+    <ClInclude Include="src\Discord\DiscordRPC_Presence.h" />
+    <ClInclude Include="src\Discord\json.hpp" />
+    <ClInclude Include="src\Protections\AntiDebug.h" />
+    <ClInclude Include="src\Protections\AntiDebugger.h" />
+    <ClInclude Include="src\Protections\AntiHook.h" />
+    <ClInclude Include="src\Protections\AntiInjection.h" />
+    <ClInclude Include="src\Protections\AntiKill.h" />
+    <ClInclude Include="src\Protections\AntiSandbox.h" />
+    <ClInclude Include="src\Protections\AntiTamper.h" />
+    <ClInclude Include="src\Protections\DiscordWebhooks.h" />
+    <ClInclude Include="src\Protections\Protections.h" />
+    <ClInclude Include="src\RR\Imgui\backends\imgui_impl_dx11.h" />
+    <ClInclude Include="src\RR\Imgui\backends\imgui_impl_win32.h" />
+    <ClInclude Include="src\RR\Imgui\imconfig.h" />
+    <ClInclude Include="src\RR\Imgui\imgui.h" />
+    <ClInclude Include="src\RR\Imgui\imgui_internal.h" />
+    <ClInclude Include="src\RR\Imgui\imstb_rectpack.h" />
+    <ClInclude Include="src\RR\Imgui\imstb_textedit.h" />
+    <ClInclude Include="src\RR\Imgui\imstb_truetype.h" />
+    <ClInclude Include="src\RR\Methods.h" />
+    <ClInclude Include="src\RR\Patching\CanvasForceUpdate.h" />
+    <ClInclude Include="src\RR\Patching\CanvasRendererColor.h" />
+    <ClInclude Include="src\RR\Patching\GraphicColor.h" />
+    <ClInclude Include="src\RR\Patching\ModSettingsViewModel.h" />
+    <ClInclude Include="src\RR\Patching\Patches.h" />
+    <ClInclude Include="src\RR\Patching\Console.h" />
+    <ClInclude Include="src\RR\Patching\RadioPatch.h" />
+    <ClInclude Include="src\RR\Patching\ServerConfiguration.h" />
+    <ClInclude Include="src\RR\Patching\ModSettingsTabInjector.h" />
+    <ClInclude Include="src\RR\Patching\UIGradient.h" />
+    <ClInclude Include="src\RR\Patching\HttpDebug.h" />
+    <ClInclude Include="src\RR\Patching\Il2cppResolution.h" />
+    <ClInclude Include="src\RR\Patching\PatchInstaller.h" />
+    <ClInclude Include="src\RR\Patching\RefereeBypass.h" />
+    <ClInclude Include="src\RR\Patching\SendRequest.h" />
+    <ClInclude Include="src\RR\Patching\UIThemes.h" />
+    <ClInclude Include="src\RR\Patching\PatchProof.h" />
+    <ClInclude Include="src\RR\Patching\PatchProofKey.h" />
+    <ClInclude Include="src\RR\UI\AssetTextures.h" />
+    <ClInclude Include="src\RR\UI\CampusMenu.h" />
+    <ClInclude Include="src\RR\UnityExplorer\imgui_inspector.h" />
+    <ClInclude Include="src\Utils\deps\minhook\include\MinHook.h" />
+    <ClInclude Include="src\Utils\deps\minhook\src\buffer.h" />
+    <ClInclude Include="src\Utils\deps\minhook\src\hde\hde32.h" />
+    <ClInclude Include="src\Utils\deps\minhook\src\hde\hde64.h" />
+    <ClInclude Include="src\Utils\deps\minhook\src\hde\pstdint.h" />
+    <ClInclude Include="src\Utils\deps\minhook\src\hde\table32.h" />
+    <ClInclude Include="src\Utils\deps\minhook\src\hde\table64.h" />
+    <ClInclude Include="src\Utils\deps\minhook\src\trampoline.h" />
+    <ClInclude Include="src\Utils\deps\spoofcall\RetSpoof.hpp" />
+    <ClInclude Include="src\Utils\globals.h" />
+    <ClInclude Include="src\Utils\Inc\Includes.h" />
+    <ClInclude Include="src\Utils\scan.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\Utils\deps\minhook\dll_resources\MinHook.def" />
+    <MASM Include="src\Utils\deps\spoofcall\RetSpoof.asm">
+      <ExcludedFromBuild Condition="'$(Platform)'=='Win32'">true</ExcludedFromBuild>
+    </MASM>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="src\Utils\deps\minhook\dll_resources\MinHook.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="src\Discord\discord-rpc-win\discord-rpc\win64-dynamic\lib\discord-rpc.lib" />
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.targets" />
+  </ImportGroup>
+</Project>

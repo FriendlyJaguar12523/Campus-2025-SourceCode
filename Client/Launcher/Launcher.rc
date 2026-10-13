@@ -1,0 +1,56 @@
+// Campus launcher resources.
+#include <windows.h>
+#include "src/Version.h"
+
+// The exe / window / taskbar icon. Explorer shows the lowest-numbered ICON, so this is 1.
+1 ICON "CampusIcon.ico"
+
+// Brand art, read by src/Tex.cpp (ResourceData). IDs must match App.cpp. (No logo in the window:
+// the art already carries it.)
+201 RCDATA "Hero.jpg"            // the art behind the Play page and the sign-in card
+202 RCDATA "HeroMask.png"        // where the art is backdrop / logo letters (white) - repainted in the player's gradient
+
+// The Campus patch's menu art: written to <game>\PATCH\Assets (src/Game.cpp EnsurePatchFolder).
+210 RCDATA "PatchAssets\\background.png"
+211 RCDATA "PatchAssets\\button.png"
+212 RCDATA "PatchAssets\\menu_button.png"
+213 RCDATA "PatchAssets\\player.png"
+214 RCDATA "PatchAssets\\toggle_off.png"
+215 RCDATA "PatchAssets\\toggle_on.png"
+
+// Valve's steam_api64.dll exactly as the game zip ships it (src/Steam.cpp EnsureSteamApi): put back when a
+// player's copy has gone missing or comes back damaged, and used for the Steam link meanwhile.
+220 RCDATA "SteamApi\\steam_api64.dll"
+
+// The patch is NOT embedded: the launcher downloads it for every Play (src/Game.h).
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION     LV_VERSION_MAJOR,LV_VERSION_MINOR,0,0
+ PRODUCTVERSION  LV_VERSION_MAJOR,LV_VERSION_MINOR,0,0
+ FILEFLAGSMASK   0x3fL
+ FILEFLAGS       0x0L
+ FILEOS          VOS_NT_WINDOWS32
+ FILETYPE        VFT_APP
+ FILESUBTYPE     0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "080904b0"
+        BEGIN
+            VALUE "CompanyName",      "Campus"
+            VALUE "FileDescription",  "Campus Launcher"
+            VALUE "FileVersion",      LV_VERSION_STR
+            VALUE "InternalName",     "Campus"
+            VALUE "LegalCopyright",   "Copyright (C) Campus. All rights reserved."
+            VALUE "LegalTrademarks",  ""
+            VALUE "OriginalFilename", "Campus.exe"
+            VALUE "ProductName",      "Campus"
+            VALUE "ProductVersion",   LV_VERSION_STR
+            VALUE "Comments",         "Sign-in launcher for Campus. Downloads game files and the per-session patch."
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x809, 1200
+    END
+END

@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="Release" />
+    <Platform Name="x64" />
+  </Configurations>
+  <Project Path="Launcher.vcxproj" Id="d8a5f8b7-42c9-4e12-a5c0-8c9101b2b3e4" />
+</Solution>

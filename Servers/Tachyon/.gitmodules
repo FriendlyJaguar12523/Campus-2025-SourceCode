@@ -1,0 +1,3 @@
+[submodule "vendor/LiteNetLibPP"]
+	path = vendor/LiteNetLibPP
+	url = https://github.com/Revan600/LiteNetLibPP.git

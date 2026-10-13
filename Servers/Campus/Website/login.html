@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login Campus</title>
+  <link rel="icon" type="image/png" href="assets/cat-icon.png">
+  <link rel="apple-touch-icon" href="assets/cat-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=20260927c" />
+</head>
+<body class="login-page">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <main id="main" class="login-wrap">
+    <a href="/" class="login-card-logo">
+      <span class="cat-shift"><img src="assets/cat-icon.png" alt="Campus" class="login-cat"
+        onerror="this.outerHTML='<span class=logo-text style=font-size:2rem>campus</span>'"></span>
+      <span class="brand-wrap"><span class="login-brand">Campus</span></span>
+    </a>
+
+    <div class="login-card">
+      <h1>Welcome back</h1>
+      <p class="login-sub">Log in to your Campus account</p>
+
+      <form id="loginForm">
+        <label class="field">
+          <span>Username or email</span>
+          <input id="loginUser" type="text" placeholder="Username" autocomplete="username">
+        </label>
+        <label class="field">
+          <span>Password</span>
+          <input id="loginPass" type="password" placeholder="••••••••" autocomplete="current-password">
+        </label>
+
+        <p class="login-error" id="loginError"></p>
+
+        <div class="login-row">
+          <label class="remember"><input type="checkbox"> Remember me</label>
+          <a href="#" class="forgot">Forgot password?</a>
+        </div>
+
+        <button type="submit" class="btn-dl login-submit">Log in</button>
+      </form>
+
+      <!-- Shown instead of the form above once the password checks out on a 2FA account. -->
+      <form id="login2faForm" style="display:none;">
+        <label class="field">
+          <span>6-digit code (or a recovery code)</span>
+          <input id="login2faCode" type="text" inputmode="numeric" placeholder="123456" autocomplete="one-time-code">
+        </label>
+        <p class="login-error" id="login2faError"></p>
+        <button type="submit" class="btn-dl login-submit">Verify</button>
+        <button type="button" id="login2faBack" class="btn-dl login-submit" style="background:transparent; border:1px solid rgba(255,255,255,.2); margin-top:8px;">&larr; Back</button>
+      </form>
+
+      <p class="login-foot" id="loginFoot">New here? <a href="/signup">Create account</a></p>
+    </div>
+
+    <a href="/" class="dl-back">← Back to home</a>
+  </main>
+
+  <script src="data.js?v=20260927c"></script>
+
+  <script src="app.js?v=20260927c"></script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+#include <windows.h>
+#include "resource.h"
+
+// Application icon
+IDI_MAIN_ICON ICON "CampusIcon.ico"
+
+// PNG-typed resources kept for compatibility with any old code path. The new imgui launcher
+// loads via RT_RCDATA (below), so these two aren't referenced by Launcher.cpp any more, but
+// leaving them doesn't hurt and preserves the original resource layout.
+IDR_CAMPUS_LOGO  PNG "CampusLogo.png"
+IDR_TITLE_CUTOUT PNG "TitleCutout.png"
+
+// The imgui build embeds admin-panel assets as raw RCDATA blobs. IDs must match the #define
+// values in Launcher.cpp (IDR_ANIMATED_ICON_PNG=200 / IDR_BACKGROUND_PNG=201 /
+// IDR_CUTOUT_PNG=202 / IDR_RUBIK_TTF=203).
+200 RCDATA "AnimatedIcon.png"
+201 RCDATA "Background.png"
+202 RCDATA "Cutout.png"
+203 RCDATA "Rubik-Variable.ttf"
+204 RCDATA "SteamIcon.png"       // Screen mode card icon (PC / Steam)
+205 RCDATA "MetaLogo.png"        // VR mode card icon (Meta)
+
+// Version information
+VS_VERSION_INFO VERSIONINFO
+FILEVERSION     1,0,0,0
+PRODUCTVERSION  1,0,0,0
+FILEFLAGSMASK   0x3fL
+FILEFLAGS       0x0L
+FILEOS          VOS_NT_WINDOWS32
+FILETYPE        VFT_APP
+FILESUBTYPE     0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "CompanyName",      "Campus"
+            VALUE "FileDescription",  "Campus Launcher (2025)"
+            VALUE "FileVersion",      "1.0.0.0"
+            VALUE "InternalName",     "CampusLauncher2025"
+            VALUE "OriginalFilename", "CampusLauncher2025.exe"
+            VALUE "ProductName",      "Campus"
+            VALUE "ProductVersion",   "1.0.0.0"
+        END
+    END
+
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0409, 0x04b0
+    END
+END

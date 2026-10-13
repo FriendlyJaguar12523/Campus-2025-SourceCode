@@ -1,0 +1,6 @@
+.vs/
+*.user
+*.suo
+*.log
+*.db
+/Servers/Campus/Data/

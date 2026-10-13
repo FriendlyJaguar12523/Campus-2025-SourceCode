@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stats Campus</title>
+  <link rel="icon" type="image/png" href="assets/cat-icon.png">
+  <link rel="apple-touch-icon" href="assets/cat-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=20260927c" />
+  <style>
+    .stats-page{max-width:1100px;margin:0 auto;padding:calc(var(--topbar-h) + 28px) 24px 80px;}
+    /* hero */
+    .st-hero{position:relative;overflow:hidden;border-radius:22px;padding:26px 28px;color:#fff;background:var(--gradient-main);box-shadow:0 12px 34px rgba(0,0,0,.18);}
+    .st-hero::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 18% 20%,rgba(255,255,255,.28),transparent 48%),radial-gradient(circle at 90% 110%,rgba(255,255,255,.16),transparent 40%);pointer-events:none;}
+    .st-hero > *{position:relative;z-index:1;}
+    .st-who{display:flex;align-items:center;gap:16px;}
+    .st-who img{width:72px;height:72px;border-radius:50%;object-fit:cover;border:3px solid rgba(255,255,255,.7);box-shadow:0 6px 18px rgba(0,0,0,.25);background:rgba(255,255,255,.2);}
+    .st-who h1{font-size:26px;font-weight:800;line-height:1.1;margin:0;}
+    .st-who .sub{opacity:.9;font-size:14px;margin-top:4px;font-weight:600;}
+    .st-lvl{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.22);padding:3px 10px;border-radius:999px;font-size:12px;font-weight:700;margin-left:8px;vertical-align:middle;}
+    .st-tokens{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:22px;}
+    .st-tok{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);backdrop-filter:blur(6px);border-radius:16px;padding:14px 16px;}
+    .st-tok .v{font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1;display:flex;align-items:center;gap:8px;}
+    .st-tok .v svg{width:22px;height:22px;flex:0 0 auto;}
+    .st-tok .l{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;opacity:.85;margin-top:8px;}
+    .st-tok .h{font-size:12px;opacity:.8;margin-top:4px;}
+    /* sections */
+    .st-sec{margin-top:30px;}
+    .st-sec h2{font-size:15px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:0 0 12px;display:flex;align-items:center;gap:10px;}
+    .st-sec h2::after{content:'';flex:1;height:1px;background:var(--line);}
+    .st-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;}
+    .st-box{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 16px 14px;box-shadow:0 2px 10px rgba(0,0,0,.05);transition:transform .15s,box-shadow .15s;}
+    .st-box:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(0,0,0,.10);}
+    .st-box .ic{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:var(--primary-soft);color:var(--primary);margin-bottom:12px;}
+    .st-box .ic svg{width:18px;height:18px;}
+    .st-box .v{font-size:26px;font-weight:800;letter-spacing:-.02em;line-height:1.05;}
+    .st-box .l{color:var(--muted);font-size:13px;font-weight:600;margin-top:6px;}
+    .st-note{color:var(--muted);font-size:13px;margin:-4px 0 12px;}
+    /* sales */
+    .sale-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px;}
+    .sale{display:grid;grid-template-columns:72px 1fr;gap:14px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;box-shadow:0 2px 10px rgba(0,0,0,.05);}
+    .sale img,.sale .ph{width:72px;height:72px;border-radius:14px;object-fit:cover;background:var(--gradient-cool);display:flex;align-items:center;justify-content:center;font-size:28px;box-shadow:0 4px 12px rgba(0,0,0,.14);}
+    .sale .name{font-weight:800;font-size:15px;line-height:1.2;}
+    .sale .meta{color:var(--muted);font-size:12.5px;margin-top:4px;}
+    .kind{display:inline-block;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:2px 8px;border-radius:999px;background:var(--primary-soft);color:var(--primary);margin-right:6px;vertical-align:middle;}
+    .sale .nums{display:flex;gap:14px;margin-top:10px;}
+    .sale .num{background:var(--panel);border-radius:10px;padding:7px 10px;flex:1;}
+    .sale .num b{display:block;font-size:16px;font-weight:800;}
+    .sale .num span{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em;}
+    .st-empty{background:var(--card);border:1px dashed var(--line);border-radius:16px;padding:26px;text-align:center;color:var(--muted);font-weight:600;}
+    /* recent */
+    .recent-wrap{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.05);}
+    .recent{width:100%;border-collapse:collapse;font-size:13.5px;}
+    .recent th{text-align:left;padding:12px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);background:var(--panel);}
+    .recent td{padding:12px 14px;border-top:1px solid var(--line);}
+    .recent tr:hover td{background:var(--panel);}
+    .pill{display:inline-block;padding:2px 9px;border-radius:999px;font-size:11px;font-weight:700;}
+    .pill.paid{background:rgba(34,197,94,.16);color:#16a34a;}
+    .pill.pending{background:rgba(245,158,11,.16);color:#d97706;}
+    /* the Rec Room token mark */
+    .rr-token{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:9px;background:#6d4fd9;color:#fff;box-shadow:0 3px 8px rgba(0,0,0,.25);flex:0 0 auto;vertical-align:middle;}
+    .rr-token svg{width:24px;height:24px;}
+    .st-tok .v .rr-token{background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.35);}
+    .st-box .ic.tok{background:#6d4fd9;color:#fff;}
+    /* earnings graph */
+    .chart-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px 10px;box-shadow:0 2px 10px rgba(0,0,0,.05);}
+    .chart-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:6px;}
+    .chart-head .t{font-weight:800;font-size:15px;}
+    .chart-head .sum{color:var(--muted);font-size:13px;font-weight:600;}
+    .chart-head .sum b{color:var(--text);}
+    .range{appearance:none;-webkit-appearance:none;background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:7px 34px 7px 12px;font:inherit;font-weight:700;font-size:13px;cursor:pointer;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238a8a90' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><path d='M6 9l6 6 6-6'/></svg>");background-repeat:no-repeat;background-position:right 12px center;}
+    .range:focus{outline:2px solid var(--primary);outline-offset:1px;}
+    .chart{width:100%;height:220px;display:block;}
+    .chart .bar{fill:var(--primary);opacity:.85;transition:opacity .12s;}
+    .chart .bar:hover{opacity:1;}
+    .chart .bar.zero{fill:var(--line);opacity:1;}
+    .chart .grid{stroke:var(--line);stroke-width:1;}
+    .chart .lbl{fill:var(--muted);font-size:11px;font-weight:600;}
+    .chart .ylbl{fill:var(--muted);font-size:10.5px;font-weight:600;}
+    .chart .line{fill:none;stroke:#f97316;stroke-width:2.2;stroke-linejoin:round;stroke-linecap:round;}
+    .chart .dot{fill:#f97316;stroke:var(--card);stroke-width:2;}
+    .legend{display:flex;gap:16px;font-size:12px;color:var(--muted);font-weight:600;margin-top:4px;}
+    .legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:middle;}
+    .chart-empty{color:var(--muted);font-size:13px;text-align:center;padding:40px 0;}
+    @media (max-width:640px){.st-tokens{grid-template-columns:1fr;}.st-who h1{font-size:22px;}.stats-page{padding-left:14px;padding-right:14px;}}
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="topbar">
+    <div class="top-left">
+      <button class="side-toggle" id="burger" aria-label="Open menu">
+        <img src="assets/cat-icon.png" alt="Menu" class="burger-cat" id="burgerCat">
+      </button>
+    </div>
+    <div class="top-right">
+      <button class="icon-btn" id="searchBtn" aria-label="Search">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.7" y2="16.7"/></svg>
+      </button>
+      <button class="icon-btn notif-btn" id="notifBtn" aria-label="Notifications">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+        <span class="notif-badge hidden" id="notifBadge"></span>
+      </button>
+      <a href="/login" class="btn-login">Log in</a>
+      <a href="/download" class="btn-dl">DOWNLOAD</a>
+    </div>
+  </header>
+
+  <aside class="cat-drawer" id="catDrawer">
+    <nav class="cd-nav">
+      <a href="/">Home</a>
+      <a href="/rooms">Rooms</a>
+      <a href="/messages">Messages</a>
+      <a href="/#feed">Creative Program</a>
+      <a href="/patch-notes">Patch Notes</a>
+      <a href="/support">Support</a>
+      <a href="/news">News</a>
+      <a href="/challenges">Challenges</a>
+      <a href="/download">Download</a>
+      <a href="https://discord.gg/xH8MMwK5Bk" target="_blank" rel="noopener">Discord</a>
+      <a href="/accessibility">Accessibility</a>
+    </nav>
+    <button class="cd-theme-toggle"></button>
+  </aside>
+  <div class="side-scrim" id="scrim"></div>
+
+  <main id="main" class="stats-page">
+    <section class="st-hero">
+      <div class="st-who">
+        <img id="stAv" alt="">
+        <div>
+          <h1>Stats <span class="st-lvl" id="stLvl"></span></h1>
+          <div class="sub" id="stSub">Your rooms, your sales, your tokens.</div>
+        </div>
+      </div>
+      <div class="st-tokens">
+        <div class="st-tok"><div class="v"><span class="rr-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 7.5v11"/><path d="M10 11c0-2.2 2.2-3.5 4.6-2.9"/><path d="M7 13.6h6.5"/><path d="M7 16.2h6.5"/></svg></span><span id="tkNow">0</span></div><div class="l">Tokens</div><div class="h">what you have right now</div></div>
+        <div class="st-tok"><div class="v"><span class="rr-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 7.5v11"/><path d="M10 11c0-2.2 2.2-3.5 4.6-2.9"/><path d="M7 13.6h6.5"/><path d="M7 16.2h6.5"/></svg></span><span id="tkPend">0</span></div><div class="l">Pending</div><div class="h" id="tkPendH">from sales still in the 14-day hold</div></div>
+        <div class="st-tok"><div class="v"><span class="rr-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 7.5v11"/><path d="M10 11c0-2.2 2.2-3.5 4.6-2.9"/><path d="M7 13.6h6.5"/><path d="M7 16.2h6.5"/></svg></span><span id="tkEarn">0</span></div><div class="l">Earned</div><div class="h">paid out to you so far</div></div>
+      </div>
+    </section>
+
+    <section class="st-sec">
+      <h2>Earnings</h2>
+      <div class="chart-card">
+        <div class="chart-head">
+          <div><div class="t">Tokens earned over time</div><div class="sum" id="chartSum"></div></div>
+          <select class="range" id="chartRange" aria-label="Time range">
+            <option value="week">This week</option>
+            <option value="month">This month</option>
+            <option value="year">This year</option>
+          </select>
+        </div>
+        <div id="chartWrap"><div class="chart-empty">Loading…</div></div>
+        <div class="legend"><span><i style="background:var(--primary)"></i>Your cut</span><span><i style="background:#f97316"></i>What buyers spent</span></div>
+      </div>
+    </section>
+
+    <section class="st-sec"><h2>Rooms</h2><div class="st-grid" id="gridRooms"></div></section>
+    <section class="st-sec"><h2>Creations</h2><div class="st-grid" id="gridMade"></div></section>
+    <section class="st-sec">
+      <h2>Sales</h2>
+      <p class="st-note" id="stNote"></p>
+      <div class="sale-list" id="saleList"><div class="st-empty">Loading…</div></div>
+    </section>
+    <section class="st-sec"><h2>Recent purchases</h2><div id="recentWrap"><div class="st-empty">Loading…</div></div></section>
+  </main>
+
+  <!-- SEARCH PANEL -->
+  <div class="search-panel" id="searchPanel">
+    <div class="search-card">
+      <div class="search-tabs">
+        <button class="stab active" data-tab="people">People</button>
+        <button class="stab" data-tab="rooms">Rooms</button>
+      </div>
+      <div class="search-field">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.7" y2="16.7"/></svg>
+        <input type="text" id="searchInput" placeholder="Search people…" autocomplete="off">
+      </div>
+      <div class="search-results" id="searchResults"></div>
+    </div>
+  </div>
+  <div class="search-scrim" id="searchScrim"></div>
+
+  <script src="data.js?v=20260927c"></script>
+
+  <script src="app.js?v=20260927c"></script>
+
+  <script>
+  (function () {
+    const ICON = {"visits": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z\"/><circle cx=\"12\" cy=\"12\" r=\"3\"/></svg>", "cheers": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.3a2 2 0 0 0 2-1.7l1.4-9a2 2 0 0 0-2-2.3H14z\"/><path d=\"M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3\"/></svg>", "rooms": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z\"/><path d=\"M9 22V12h6v10\"/></svg>", "inv": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z\"/></svg>", "cloth": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M20.4 6.5 16 4l-1.5 2h-5L8 4 3.6 6.5 5 11l2.5-.8V20h9v-9.8l2.5.8z\"/></svg>", "key": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M21 2l-2 2m-7.6 7.6a5.5 5.5 0 1 1-7.8 7.8 5.5 5.5 0 0 1 7.8-7.8zm0 0L19 4m-3 3 3 3\"/></svg>", "coin": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M10 7.5v11\"/><path d=\"M10 11c0-2.2 2.2-3.5 4.6-2.9\"/><path d=\"M7 13.6h6.5\"/><path d=\"M7 16.2h6.5\"/></svg>", "flask": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M9 3h6M10 3v6L4.5 19a1.5 1.5 0 0 0 1.3 2.2h12.4a1.5 1.5 0 0 0 1.3-2.2L14 9V3\"/><path d=\"M7 15h10\"/></svg>", "cart": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"9\" cy=\"21\" r=\"1\"/><circle cx=\"20\" cy=\"21\" r=\"1\"/><path d=\"M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6\"/></svg>"};
+    const fmt = n => (n == null ? '0' : Number(n).toLocaleString());
+    const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const day = iso => iso ? new Date(iso).toLocaleDateString(undefined, { day: 'numeric', month: 'short' }) : '';
+    const KIND = { invention: 'Invention', ugc: 'Clothing', roomkey: 'Room key', roomcurrency: 'Room currency', roomconsumable: 'Consumable' };
+    const KICON = { invention: ICON.inv, ugc: ICON.cloth, roomkey: ICON.key, roomcurrency: ICON.coin, roomconsumable: ICON.flask };
+    const box = (ic, v, l) => '<div class="st-box"><div class="ic">' + ic + '</div><div class="v">' + v + '</div><div class="l">' + l + '</div></div>';
+    fetch('/api/site/stats', { credentials: 'same-origin' }).then(r => r.json()).then(d => {
+      if (!d || !d.ok) {
+        document.querySelector('.stats-page').innerHTML = '<div class="forbidden"><h1>401</h1><p>You need to be logged in to view your stats.</p><a href="/login" class="btn-dl">Log in</a></div>';
+        return;
+      }
+      const av = document.getElementById('stAv');
+      try {
+        const me = (typeof USER_KEY !== 'undefined') ? localStorage.getItem(USER_KEY) : null;
+        if (av && me && typeof avatarUrl === 'function') av.src = avatarUrl(me); else if (av) av.style.display = 'none';
+      } catch (e) { if (av) av.style.display = 'none'; }
+      document.getElementById('stSub').textContent = '@' + d.username;
+      document.getElementById('stLvl').textContent = 'Level ' + d.level;
+      document.getElementById('tkNow').textContent = fmt(d.tokens);
+      document.getElementById('tkPend').textContent = fmt(d.tokensPending);
+      document.getElementById('tkEarn').textContent = fmt(d.tokensEarned);
+      if (d.nextPayout) document.getElementById('tkPendH').textContent = 'next payout ' + day(d.nextPayout);
+      document.getElementById('gridRooms').innerHTML =
+        box(ICON.visits, fmt(d.roomVisits), 'Room visits') +
+        box(ICON.cheers, fmt(d.roomCheers), 'Room cheers') +
+        box(ICON.rooms, fmt(d.rooms), 'Rooms');
+      document.getElementById('gridMade').innerHTML =
+        box(ICON.inv, fmt(d.inventionsPublished) + '<span style="color:var(--muted);font-size:16px;font-weight:700"> / ' + fmt(d.inventions) + '</span>', 'Inventions published / made') +
+        box(ICON.cart, fmt(d.inventionsBought), 'Inventions bought by others') +
+        box(ICON.cloth, fmt(d.customItems), 'Custom clothing') +
+        box(ICON.key, fmt(d.keys), 'Room keys') +
+        box(ICON.coin, fmt(d.currencies), 'Room currencies') +
+        box(ICON.flask, fmt(d.consumables), 'Room consumables') +
+        box(ICON.cart, fmt(d.salesCount), 'Sales') +
+        box(ICON.coin, fmt(d.revenue), 'Tokens buyers spent').replace('class="ic"', 'class="ic tok"');
+      // ---- earnings graph ----
+      const series = (d.series || []).map(x => ({ t: new Date(x.d + 'T00:00:00Z'), share: x.share, spent: x.spent, n: x.n }));
+      const rangeSel = document.getElementById('chartRange');
+      function buckets(range) {
+        const now = new Date(); const out = [];
+        if (range === 'year') {
+          for (let i = 11; i >= 0; i--) { const m = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - i, 1)); out.push({ start: m, end: new Date(Date.UTC(m.getUTCFullYear(), m.getUTCMonth() + 1, 1)), label: m.toLocaleDateString(undefined, { month: 'short' }) }); }
+        } else {
+          const days = range === 'week' ? 7 : 30;
+          for (let i = days - 1; i >= 0; i--) { const dd = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - i)); out.push({ start: dd, end: new Date(dd.getTime() + 864e5), label: days === 7 ? dd.toLocaleDateString(undefined, { weekday: 'short' }) : String(dd.getUTCDate()) }); }
+        }
+        for (const b of out) { b.share = 0; b.spent = 0; b.n = 0; for (const p of series) if (p.t >= b.start && p.t < b.end) { b.share += p.share; b.spent += p.spent; b.n += p.n; } }
+        return out;
+      }
+      function draw(range) {
+        const b = buckets(range);
+        const total = b.reduce((a, x) => a + x.share, 0), spent = b.reduce((a, x) => a + x.spent, 0), n = b.reduce((a, x) => a + x.n, 0);
+        document.getElementById('chartSum').innerHTML = '<b>' + fmt(total) + '</b> earned \u00b7 <b>' + fmt(spent) + '</b> spent by buyers \u00b7 ' + fmt(n) + ' sale' + (n === 1 ? '' : 's');
+        const W = 800, H = 220, padL = 46, padR = 12, padT = 12, padB = 28;
+        const max = Math.max(1, ...b.map(x => Math.max(x.share, x.spent)));
+        const nice = Math.pow(10, Math.floor(Math.log10(max))); const top = Math.ceil(max / nice) * nice;
+        const iw = W - padL - padR, ih = H - padT - padB, bw = iw / b.length;
+        const y = v => padT + ih - (v / top) * ih;
+        let svg = '<svg class="chart" viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none">';
+        for (let g = 0; g <= 4; g++) { const v = top * g / 4, yy = y(v); svg += '<line class="grid" x1="' + padL + '" x2="' + (W - padR) + '" y1="' + yy + '" y2="' + yy + '"/><text class="ylbl" x="' + (padL - 6) + '" y="' + (yy + 4) + '" text-anchor="end">' + fmt(v) + '</text>'; }
+        b.forEach((x, i) => {
+          const cx = padL + bw * i + bw / 2, w = Math.max(4, bw * 0.55), hh = Math.max(0, y(0) - y(x.share));
+          svg += '<rect class="bar' + (x.share ? '' : ' zero') + '" x="' + (cx - w / 2) + '" y="' + (x.share ? y(x.share) : y(0) - 2) + '" width="' + w + '" height="' + (x.share ? hh : 2) + '" rx="3"><title>' + x.label + ': ' + fmt(x.share) + ' earned, ' + fmt(x.spent) + ' spent, ' + x.n + ' sale' + (x.n === 1 ? '' : 's') + '</title></rect>';
+          const every = b.length > 12 ? 5 : 1;
+          if (i % every === 0 || i === b.length - 1) svg += '<text class="lbl" x="' + cx + '" y="' + (H - 8) + '" text-anchor="middle">' + x.label + '</text>';
+        });
+        svg += '<polyline class="line" points="' + b.map((x, i) => (padL + bw * i + bw / 2) + ',' + y(x.spent)).join(' ') + '"/>';
+        b.forEach((x, i) => { if (x.spent) svg += '<circle class="dot" cx="' + (padL + bw * i + bw / 2) + '" cy="' + y(x.spent) + '" r="3.5"><title>' + x.label + ': ' + fmt(x.spent) + ' spent</title></circle>'; });
+        svg += '</svg>';
+        document.getElementById('chartWrap').innerHTML = (n === 0 && series.length === 0) ? '<div class="chart-empty">No sales yet - the graph fills in as things sell.</div>' : svg;
+      }
+      rangeSel.addEventListener('change', () => draw(rangeSel.value));
+      draw(rangeSel.value);
+      document.getElementById('stNote').textContent = 'You keep ' + d.percent + '% of what a buyer spends. Each sale is held for ' + d.pendDays + ' days and paid out on the first Sunday after that.';
+      const list = document.getElementById('saleList');
+      const items = d.items || [];
+      list.innerHTML = items.length ? items.map(it =>
+        '<div class="sale">'
+        + (it.image ? '<img src="' + esc(it.image) + '" alt="">' : '<div class="ph" style="color:#fff">' + (KICON[it.kind] || ICON.cart).replace('<svg ', '<svg width="30" height="30" ') + '</div>')
+        + '<div><div class="name">' + esc(it.name || it.itemId) + '</div>'
+        + '<div class="meta"><span class="kind">' + esc(KIND[it.kind] || it.kind) + '</span>' + fmt(it.sold) + ' sold \u00b7 ' + fmt(it.revenue) + ' spent by buyers \u00b7 last ' + day(it.lastSold) + '</div>'
+        + '<div class="nums"><div class="num"><b>' + fmt(it.pending) + '</b><span>pending' + (it.nextPayout ? ' \u00b7 ' + day(it.nextPayout) : '') + '</span></div><div class="num"><b>' + fmt(it.earned) + '</b><span>earned</span></div></div>'
+        + '</div></div>').join('')
+        : '<div class="st-empty">Nothing sold yet. Publish an invention, clothing, a room key, currency or consumable with a price and it shows up here.</div>';
+      const rec = d.recent || [];
+      document.getElementById('recentWrap').innerHTML = rec.length
+        ? '<div class="recent-wrap"><table class="recent"><tr><th>When</th><th>Item</th><th>Buyer</th><th>Spent</th><th>Your cut</th><th>Pays out</th><th></th></tr>'
+          + rec.map(r => '<tr><td>' + day(r.at) + '</td><td><span class="kind">' + esc(KIND[r.Kind] || r.Kind) + '</span>' + esc(r.item) + '</td><td>@' + esc(r.buyer) + '</td><td>' + fmt(r.Spent) + '</td><td><b>' + fmt(r.Share) + '</b></td><td>' + day(r.payoutAt) + '</td><td><span class="pill ' + (r.paid ? 'paid">paid' : 'pending">pending') + '</span></td></tr>').join('')
+          + '</table></div>'
+        : '<div class="st-empty">No purchases yet.</div>';
+    }).catch(() => { document.getElementById('saleList').innerHTML = '<div class="st-empty">Could not load stats.</div>'; });
+  })();
+  </script>
+
+
+</body>
+</html>

@@ -1,0 +1,65 @@
+diff --git a/include/lnl/net_manager.h b/include/lnl/net_manager.h
+index c1ec872..e96dbf5 100644
+--- a/include/lnl/net_manager.h
++++ b/include/lnl/net_manager.h
+@@ -4,6 +4,8 @@
+ #include <optional>
+ #include <thread>
+ #include <unordered_map>
++#include <functional>
++#include <vector>
+ 
+ #ifdef WIN32
+ 
+@@ -80,6 +82,13 @@ namespace lnl {
+         bool disconnect_on_unreachable = false;
+         std::string name;
+ 
++        // Optional datagram transform layers (a generic hook, equivalent to the C# PacketLayerBase).
++        // outbound_layer: given the packet about to be sent, fill `out` with the bytes to put on the
++        //   wire and return their length. inbound_layer: mutate a freshly received datagram in place
++        //   and return the new length, or 0 to drop it. Used by Tachyon for the RecRoom 0x11 marker.
++        std::function<size_t(const uint8_t* data, size_t length, std::vector<uint8_t>& out)> outbound_layer;
++        std::function<size_t(uint8_t* data, size_t length)> inbound_layer;
++
+         explicit net_manager(net_event_listener* listener);
+ 
+         ~net_manager();
+diff --git a/src/lnl/net_manager.cpp b/src/lnl/net_manager.cpp
+index 0cfe2a7..fa23eef 100644
+--- a/src/lnl/net_manager.cpp
++++ b/src/lnl/net_manager.cpp
+@@ -219,6 +219,15 @@ void lnl::net_manager::receive_logic() {
+ 
+         packet->resize(size);
+ 
++        if (inbound_layer) {
++            size_t newLen = inbound_layer(packet->data(), (size_t) size);
++            if (newLen == 0) {          // layer dropped the datagram (unknown/undecryptable marker)
++                pool_recycle(packet);
++                continue;
++            }
++            packet->resize(newLen);
++        }
++
+         on_message_received(packet, addr);
+     }
+ }
+@@ -517,8 +526,16 @@ int32_t lnl::net_manager::send_raw(const uint8_t* data, size_t offset, size_t le
+         return 0;
+     }
+ 
++    const uint8_t* sendData = &data[offset];
++    size_t sendLen = length;
++    if (outbound_layer) {
++        thread_local std::vector<uint8_t> layerBuf;
++        sendLen = outbound_layer(&data[offset], length, layerBuf);
++        sendData = layerBuf.data();
++    }
++
+     auto result = sendto(m_socket,
+-                         (const char*) &data[offset], (int) length,
++                         (const char*) sendData, (int) sendLen,
+                          0,
+                          (sockaddr*) &endpoint.raw, sizeof(sockaddr_in));
+ 

@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Admin</title>
+    <link rel="icon" href="/admin-assets/AnimatedIcon.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --purple:  #791B8D;
+            --magenta: #BF2966;
+            --orange:  #F95D24;
+            --gold:    #FA9912;
+        }
+        * { box-sizing: border-box; }
+        html, body { margin: 0; padding: 0; height: 100%; }
+        body {
+            font-family: 'Rubik', system-ui, sans-serif;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            /* Base gradient echoes the sunset ramp used in the UIGradient recolor patch:
+               purple top-left -> magenta -> orange -> gold bottom-right. Sits under the
+               tiled AnimatedIcon watermark so the whole page reads as "Campus" without
+               any single hero image dominating. */
+            background:
+                url('/admin-assets/Background.png') no-repeat center center fixed,
+                linear-gradient(135deg, var(--purple) 0%, var(--magenta) 40%, var(--orange) 75%, var(--gold) 100%);
+            background-size: cover;
+            position: relative;
+            overflow-x: hidden;
+        }
+        /* AnimatedIcon tile pattern, rotated + inset so its corners never show, slowly
+           drifts across the page. body::before so no admin-page HTML has to change to
+           include it - it just sits behind everything at 12% opacity. */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: -40vmax;
+            background-image: url('/admin-assets/AnimatedIcon.png');
+            background-repeat: repeat;
+            background-size: 150px 150px;
+            transform: rotate(-8deg);
+            opacity: 0.12;
+            pointer-events: none;
+            z-index: 0;
+            animation: driftPattern 60s linear infinite;
+        }
+        @keyframes driftPattern {
+            from { background-position: 0 0; }
+            to   { background-position: 300px 300px; }
+        }
+        .hero {
+            display: block;
+            max-width: 320px;
+            width: 60vw;
+            margin: 0 auto 24px auto;
+            filter: drop-shadow(0 6px 14px rgba(0,0,0,.35));
+        }
+        .login-card {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 420px;
+            background: rgba(20, 12, 30, 0.72);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255,255,255,0.14);
+            border-radius: 18px;
+            padding: 36px 34px 30px;
+            box-shadow: 0 24px 60px rgba(0,0,0,0.45);
+        }
+        h2 {
+            font-family: 'Rubik', sans-serif;
+            font-weight: 700;
+            text-align: center;
+            margin: 0 0 22px;
+            font-size: 26px;
+            letter-spacing: 0.5px;
+        }
+        .input-group { margin-bottom: 16px; }
+        label {
+            display: block;
+            font-weight: 500;
+            font-size: 13px;
+            margin-bottom: 6px;
+            opacity: 0.85;
+            letter-spacing: 0.3px;
+        }
+        input {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.18);
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+            font-family: inherit;
+            font-size: 15px;
+            transition: border-color .15s, background .15s;
+        }
+        input:focus {
+            outline: none;
+            border-color: var(--orange);
+            background: rgba(255,255,255,0.12);
+        }
+        input::placeholder { color: rgba(255,255,255,0.4); }
+        .login-btn {
+            display: block;
+            width: 100%;
+            padding: 13px;
+            margin-top: 6px;
+            border: none;
+            border-radius: 10px;
+            /* Same purple->orange sweep as the ramp - reads as "the primary action" without
+               fighting the background. */
+            background: linear-gradient(90deg, var(--purple), var(--orange));
+            color: #fff;
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 16px;
+            letter-spacing: 0.4px;
+            cursor: pointer;
+            transition: transform .1s, box-shadow .15s;
+            box-shadow: 0 6px 16px rgba(249,93,36,0.35);
+        }
+        .login-btn:hover { transform: translateY(-1px); box-shadow: 0 10px 22px rgba(249,93,36,0.45); }
+        .login-btn:active { transform: translateY(0); }
+        .divider {
+            text-align: center;
+            font-size: 12px;
+            letter-spacing: 2px;
+            opacity: 0.55;
+            margin: 22px 0 14px;
+            position: relative;
+        }
+        .divider::before, .divider::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: 38%;
+            height: 1px;
+            background: rgba(255,255,255,0.18);
+        }
+        .divider::before { left: 0; }
+        .divider::after  { right: 0; }
+        .discord-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            background: #5865F2;
+            color: #fff;
+            font-family: inherit;
+            font-weight: 500;
+            font-size: 15px;
+            cursor: pointer;
+            transition: background .15s;
+        }
+        .discord-btn:hover { background: #4752c4; }
+        .error-message {
+            text-align: center;
+            margin-top: 14px;
+            font-size: 13px;
+            color: #ffcccc;
+            min-height: 1em;
+        }
+        .footer {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            font-size: 12px;
+            opacity: 0.55;
+            margin-top: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <img class="hero" src="/admin-assets/Cutout.png" alt="Campus"
+             onerror="this.style.display='none'">
+
+        <div class="login-card">
+            <h2 id="cardTitle">Campus Admin</h2>
+
+            <form id="passForm">
+                <div class="input-group">
+                    <label for="username">Username</label>
+                    <input id="username" type="text" name="username" autocomplete="username" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input id="password" type="password" name="password" autocomplete="current-password" required>
+                </div>
+
+                <button class="login-btn" type="submit" id="passBtn">Log in</button>
+            </form>
+
+            <!-- Shown instead of the form above once the password checks out on a 2FA account. -->
+            <form id="codeForm" style="display:none;">
+                <div class="input-group">
+                    <label for="code">6-digit code (or a recovery code)</label>
+                    <input id="code" type="text" name="code" inputmode="numeric" autocomplete="one-time-code" placeholder="123456" autofocus>
+                </div>
+                <button class="login-btn" type="submit" id="codeBtn">Verify</button>
+                <button class="discord-btn" type="button" id="backBtn" style="background:rgba(255,255,255,.12); margin-top:10px;">&larr; Back</button>
+            </form>
+
+            <!-- Shown instead of the password form when the password checks out but the account has no 2FA yet -
+                 the admin panel is 2FA-only, so this is the only way in: set it up right now, off the password-proof
+                 ticket. Same QR-via-qrcode-generator (no third party ever sees the secret) as the website's own
+                 Settings > Security setup, just driven by a ticket instead of a logged-in session. -->
+            <form id="setupForm" style="display:none;">
+                <p style="font-size:13px; opacity:.85; margin:0 0 14px; text-align:center;">
+                    This admin panel requires two-factor authentication. Scan this with an authenticator app
+                    (Google Authenticator, Authy, 1Password, ...) or type the key in by hand.
+                </p>
+                <div id="setupQr" style="background:#fff; border-radius:10px; padding:10px; width:160px; margin:0 auto 14px;"></div>
+                <div class="input-group">
+                    <label for="setupSecret">Manual key</label>
+                    <input id="setupSecret" type="text" readonly style="font-family:monospace; font-size:13px;">
+                </div>
+                <div class="input-group">
+                    <label for="setupCode">6-digit code from the app</label>
+                    <input id="setupCode" type="text" name="code" inputmode="numeric" autocomplete="one-time-code" placeholder="123456">
+                </div>
+                <button class="login-btn" type="submit" id="setupBtn">Turn on 2FA &amp; log in</button>
+                <button class="discord-btn" type="button" id="setupBackBtn" style="background:rgba(255,255,255,.12); margin-top:10px;">&larr; Back</button>
+            </form>
+
+            <div class="error-message" id="error-message"></div>
+        </div>
+        <div class="footer">Campus &middot; private server</div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+    <script>
+        const errEl = document.getElementById('error-message');
+        const passForm = document.getElementById('passForm'), codeForm = document.getElementById('codeForm'), setupForm = document.getElementById('setupForm');
+        let pendingTicket = '';
+
+        function setBusy(btn, busy, label) { btn.disabled = busy; btn.textContent = busy ? 'Please wait...' : label; }
+
+        async function post(url, fields) {
+            const body = new URLSearchParams(fields);
+            const r = await fetch(url, { method: 'POST', body, credentials: 'same-origin' });
+            try { return await r.json(); } catch { return { success: false, error: 'Unexpected response from the server.' }; }
+        }
+
+        function hideAllSteps() {
+            passForm.style.display = 'none'; codeForm.style.display = 'none'; setupForm.style.display = 'none';
+        }
+        function showCodeStep() {
+            hideAllSteps();
+            codeForm.style.display = 'block';
+            document.getElementById('cardTitle').textContent = 'Verification code';
+            document.getElementById('code').focus();
+        }
+        function showPasswordStep() {
+            hideAllSteps();
+            passForm.style.display = 'block';
+            document.getElementById('cardTitle').textContent = 'Campus Admin';
+            errEl.textContent = '';
+        }
+        async function showSetupStep() {
+            hideAllSteps();
+            setupForm.style.display = 'block';
+            document.getElementById('cardTitle').textContent = 'Set up 2FA to continue';
+            errEl.textContent = '';
+            const d = await post('/api/web/admin/login/setup2fa/begin', { pending: pendingTicket });
+            if (!d.success) { errEl.textContent = d.error || 'Could not start setup.'; showPasswordStep(); return; }
+            document.getElementById('setupSecret').value = d.secret;
+            const qrBox = document.getElementById('setupQr');
+            qrBox.innerHTML = '';
+            try {
+                const qr = qrcode(0, 'M');
+                qr.addData(d.otpauth);
+                qr.make();
+                qrBox.innerHTML = qr.createSvgTag({ scalable: true });
+            } catch { qrBox.innerHTML = '<div style="color:#333; font-size:12px; padding:8px;">QR unavailable - use the key.</div>'; }
+            document.getElementById('setupCode').value = '';
+            document.getElementById('setupCode').focus();
+        }
+
+        passForm.addEventListener('submit', async e => {
+            e.preventDefault();
+            errEl.textContent = '';
+            const btn = document.getElementById('passBtn'); setBusy(btn, true, 'Log in');
+            const d = await post('/api/web/admin/login', { username: document.getElementById('username').value, password: document.getElementById('password').value });
+            setBusy(btn, false, 'Log in');
+            if (d.need2fa) { pendingTicket = d.pending; showCodeStep(); return; }
+            if (d.needSetup) { pendingTicket = d.pending; showSetupStep(); return; }
+            if (!d.success) { errEl.textContent = d.error || 'Invalid username or password.'; return; }
+            location.href = '/admin/home/v4';
+        });
+
+        codeForm.addEventListener('submit', async e => {
+            e.preventDefault();
+            errEl.textContent = '';
+            const btn = document.getElementById('codeBtn'); setBusy(btn, true, 'Verify');
+            const d = await post('/api/web/admin/login/2fa', { pending: pendingTicket, code: document.getElementById('code').value });
+            setBusy(btn, false, 'Verify');
+            if (d.pending) pendingTicket = d.pending;
+            if (!d.success) { errEl.textContent = d.error || 'Wrong code.'; document.getElementById('code').value = ''; document.getElementById('code').focus(); return; }
+            location.href = '/admin/home/v4';
+        });
+
+        setupForm.addEventListener('submit', async e => {
+            e.preventDefault();
+            errEl.textContent = '';
+            const btn = document.getElementById('setupBtn'); setBusy(btn, true, 'Turn on 2FA & log in');
+            const d = await post('/api/web/admin/login/setup2fa/confirm', { pending: pendingTicket, code: document.getElementById('setupCode').value });
+            setBusy(btn, false, 'Turn on 2FA & log in');
+            if (!d.success) { errEl.textContent = d.error || 'Wrong code.'; document.getElementById('setupCode').value = ''; document.getElementById('setupCode').focus(); return; }
+            if (d.recoveryCodes) {
+                alert('2FA is on. Save these one-time recovery codes somewhere safe - each works once if you lose your authenticator app:\n\n' + d.recoveryCodes.join('\n'));
+            }
+            location.href = '/admin/home/v4';
+        });
+
+        document.getElementById('backBtn').addEventListener('click', showPasswordStep);
+        document.getElementById('setupBackBtn').addEventListener('click', showPasswordStep);
+
+        // Discord sign-in is also 2FA-gated (DiscordController.cs) - instead of handing out a session directly it
+        // redirects back here with a ticket in the query string, exactly like a password login's JSON response would
+        // carry one. Pick it up the same way and jump straight into the matching step.
+        (function () {
+            const params = new URLSearchParams(location.search);
+            const step = params.get('step'), ticket = params.get('pending');
+            if (!ticket) return;
+            history.replaceState(null, '', location.pathname);
+            pendingTicket = ticket;
+            if (step === '2fa') showCodeStep();
+            else if (step === 'setup') showSetupStep();
+        })();
+    </script>
+</body>
+</html>

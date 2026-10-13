@@ -1,0 +1,26 @@
+# systemd unit for the Tachyon voice server.
+# Install:  sudo cp deploy/tachyon.service /etc/systemd/system/tachyon.service
+#           sudo systemctl daemon-reload && sudo systemctl enable --now tachyon
+# Logs:     journalctl -u tachyon -f      (Tachyon logs to stdout, exits 0 on SIGTERM)
+#
+# Adjust WorkingDirectory / ExecStart paths to wherever you cloned+built the repo on the VPS.
+
+[Unit]
+Description=Tachyon voice server (Campus)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+# Tachyon already runs in the FOREGROUND and logs to stdout - it does not daemonize, so
+# Type=simple is right and no backgrounding flag is wanted. (Note: --no-fork is NOT a
+# process flag - it disables the NGO 24-byte batch header and would break voice. Leave it
+# off so the protocol fork stays on.)
+Type=simple
+WorkingDirectory=/opt/tachyon
+ExecStart=/opt/tachyon/build/tachyon --config /opt/tachyon/tachyon.conf
+Restart=on-failure
+RestartSec=3
+# Voice is UDP on 7777 - make sure the firewall allows it (see DEPLOY.md).
+
+[Install]
+WantedBy=multi-user.target

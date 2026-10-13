@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Settings Campus</title>
+  <link rel="icon" type="image/png" href="assets/cat-icon.png">
+  <link rel="apple-touch-icon" href="assets/cat-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=20260927c" />
+  <style>
+    .discord-card{display:flex;align-items:center;gap:14px;max-width:520px;padding:16px;
+      border-radius:14px;background:rgba(88,101,242,.10);border:1px solid rgba(88,101,242,.35);}
+    .discord-logo{width:44px;height:44px;border-radius:12px;background:#5865F2;flex:0 0 auto;
+      display:flex;align-items:center;justify-content:center;}
+    .discord-info{flex:1 1 auto;min-width:0;}
+    .discord-title{font-weight:700;font-size:15px;}
+    .discord-status{opacity:.75;font-size:14px;margin-top:2px;}
+    .discord-link-btn{background:#5865F2;color:#fff;border:0;padding:10px 18px;border-radius:10px;
+      font-weight:600;font-family:inherit;font-size:14px;cursor:pointer;flex:0 0 auto;}
+    .discord-link-btn:hover{background:#4752c4;}
+    .discord-unlink-btn{background:transparent;color:#c0392b;border:1px solid rgba(192,57,43,.5);
+      padding:10px 16px;border-radius:10px;font-weight:600;font-family:inherit;font-size:14px;cursor:pointer;flex:0 0 auto;}
+    .discord-unlink-btn:hover{background:rgba(192,57,43,.10);}
+    .spotify-card{background:rgba(30,215,96,.10);border-color:rgba(30,215,96,.35);align-items:center;}
+    .spotify-card .discord-logo,.spotify-card .discord-link-btn,.spotify-card .discord-unlink-btn{margin-top:2px;}
+    .spotify-logo{background:#1DB954;}
+    .spotify-link-btn{background:#1DB954;}
+    .spotify-link-btn:hover{background:#169c46;}
+    .spotify-card .spotify-now{margin-top:10px;}
+    .spotify-vis[hidden]{display:none;}
+    .svc-show{display:flex;align-items:center;gap:10px;margin-top:10px;font-size:13px;opacity:.9;}
+    .svc-show .switch{width:38px;height:22px;} .svc-show .slider::before{width:16px;height:16px;} .svc-show .switch input:checked + .slider::before{transform:translateX(16px);}
+    .svc-show[hidden]{display:none;}
+    .discord-card .switch input:checked + .slider{background:#5865F2;}
+    .spotify-card .switch input:checked + .slider{background:#1DB954;}
+    .svc-card{margin-top:14px;}
+    .svc-card .discord-status a{color:inherit;}
+    .svc-youtube{background:rgba(255,0,0,.07);border-color:rgba(255,0,0,.3);} .svc-youtube .discord-logo,.svc-youtube .discord-link-btn,.svc-youtube .switch input:checked + .slider{background:#e60000;}
+    .svc-tiktok{background:rgba(105,201,208,.08);border-color:rgba(105,201,208,.35);} .svc-tiktok .discord-logo,.svc-tiktok .discord-link-btn{background:#111;} .svc-tiktok .switch input:checked + .slider{background:#69C9D0;}
+    .svc-x{background:rgba(127,127,127,.08);border-color:rgba(127,127,127,.3);} .svc-x .discord-logo,.svc-x .discord-link-btn{background:#000;} .svc-x .switch input:checked + .slider{background:#555;}
+    .svc-twitch{background:rgba(145,70,255,.10);border-color:rgba(145,70,255,.35);} .svc-twitch .discord-logo,.svc-twitch .discord-link-btn,.svc-twitch .switch input:checked + .slider{background:#9146FF;}
+    .svc-steam{background:rgba(27,40,56,.10);border-color:rgba(102,192,244,.35);} .svc-steam .discord-logo,.svc-steam .discord-link-btn{background:#171a21;} .svc-steam .switch input:checked + .slider{background:#66C0F4;}
+    .svc-github{background:rgba(36,41,46,.08);border-color:rgba(127,127,127,.3);} .svc-github .discord-logo,.svc-github .discord-link-btn{background:#24292e;} .svc-github .switch input:checked + .slider{background:#6e7681;}
+    .svc-reddit{background:rgba(255,69,0,.08);border-color:rgba(255,69,0,.35);} .svc-reddit .discord-logo,.svc-reddit .discord-link-btn,.svc-reddit .switch input:checked + .slider{background:#FF4500;}
+    .svc-instagram{background:rgba(225,48,108,.08);border-color:rgba(225,48,108,.35);} .svc-instagram .discord-logo,.svc-instagram .discord-link-btn,.svc-instagram .switch input:checked + .slider{background:#E1306C;}
+    .svc-card .discord-link-btn[disabled]{opacity:.5;cursor:not-allowed;}
+    .youtube-card{background:rgba(255,0,0,.07);border-color:rgba(255,0,0,.3);}
+    .youtube-logo{background:#FF0000;} .youtube-link-btn{background:#e60000;} .youtube-link-btn:hover{background:#b80000;}
+    .tiktok-card{background:rgba(0,0,0,.06);border-color:rgba(0,0,0,.25);}
+    .tiktok-logo{background:#111;} .tiktok-link-btn{background:#111;} .tiktok-link-btn:hover{background:#333;}
+    .svc-handle{display:flex;align-items:center;gap:6px;margin-top:8px;font-size:14px;}
+    .svc-handle input{flex:1 1 auto;min-width:0;max-width:260px;padding:8px 10px;border-radius:8px;border:1px solid rgba(127,127,127,.35);background:transparent;color:inherit;font:inherit;font-size:14px;}
+    .spotify-vis{display:flex;align-items:center;gap:10px;margin-top:10px;font-size:13px;opacity:.9;flex-wrap:wrap;}
+    .spotify-vis select{font:inherit;font-size:13px;padding:6px 10px;border-radius:8px;border:1px solid rgba(128,128,140,.3);background:var(--card,#fff);color:inherit;}
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="topbar">
+    <div class="top-left">
+      <button class="side-toggle" id="burger" aria-label="Open menu">
+        <img src="assets/cat-icon.png" alt="Menu" class="burger-cat" id="burgerCat">
+      </button>
+    </div>
+    <div class="top-right">
+      <button class="icon-btn" id="searchBtn" aria-label="Search">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.7" y2="16.7"/></svg>
+      </button>
+      <button class="icon-btn notif-btn" id="notifBtn" aria-label="Notifications">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+        <span class="notif-badge hidden" id="notifBadge"></span>
+      </button>
+      <a href="/login" class="btn-login">Log in</a>
+      <a href="/download" class="btn-dl">DOWNLOAD</a>
+    </div>
+  </header>
+
+  <aside class="cat-drawer" id="catDrawer">
+    <nav class="cd-nav">
+      <a href="/">Home</a>
+      <a href="/rooms">Rooms</a>
+      <a href="/messages">Messages</a>
+      <a href="/#feed">Creative Program</a>
+      <a href="/patch-notes">Patch Notes</a>
+      <a href="/support">Support</a>
+      <a href="/news">News</a>
+      <a href="/challenges">Challenges</a>
+      <a href="/download">Download</a>
+      <a href="https://discord.gg/xH8MMwK5Bk" target="_blank" rel="noopener">Discord</a>
+      <a href="/accessibility">Accessibility</a>
+    </nav>
+    <button class="cd-theme-toggle"></button>
+  </aside>
+  <div class="side-scrim" id="scrim"></div>
+
+  <main id="main" class="settings-page">
+    <div class="settings-userhead">
+      <img class="su-av" id="suAv" alt="">
+      <div class="su-id"><span class="su-name" id="suName">User</span><span class="su-handle" id="suHandle">@user</span></div>
+      <div class="su-status" id="suStatus"><span class="su-dot"></span> </div>
+    </div>
+
+    <div class="settings-layout">
+      <nav class="settings-nav">
+        <button class="snav active" data-panel="profile">Profile</button>
+        <button class="snav" data-panel="email">Email</button>
+        <button class="snav" data-panel="password">Password</button>
+        <button class="snav" data-panel="quickchat">Quick chat</button>
+        <button class="snav" data-panel="dnd">Do not disturb</button>
+        <button class="snav" data-panel="security">Security</button>
+        <button class="snav" data-panel="account">Account</button>
+        <button class="snav" data-panel="juniors">Juniors</button>
+        <button class="snav" data-panel="services">Services</button>
+        <button class="snav" data-panel="export">Export</button>
+        <button class="snav snav-logout" id="setLogout">Logout</button>
+      </nav>
+
+      <div class="settings-content">
+        <!-- PROFILE -->
+        <section class="spanel active" data-panel="profile">
+          <h2>Profile Settings</h2>
+          <div class="sfield"><label>Username</label><input type="text" id="setUsername" maxlength="24" placeholder="username"></div>
+          <div class="sfield"><label>Display name</label><input type="text" id="setNickname" maxlength="24" placeholder="Your display name"></div>
+          <div class="sfield"><label class="sreq">Bio</label><textarea id="setBio" rows="3" maxlength="200" placeholder="Tell people about yourself"></textarea></div>
+          <div class="srow-save"><button class="btn-dl ssave" data-save="Profile">Save</button></div>
+
+        </section>
+
+        <!-- EMAIL -->
+        <section class="spanel" data-panel="email">
+          <h2>Email Settings</h2>
+          <div class="sfield"><label for="acctEmail">Email address</label><input id="acctEmail" type="email" autocomplete="email" placeholder="you@example.com" maxlength="254"><p class="shint" id="acctEmailHint" style="color:var(--muted);font-size:.85rem;margin:6px 0 0">Used for account recovery and the emails below. Leave blank to remove it.</p></div>
+          <div class="etog"><span>New Features</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+          <div class="etog"><span>Game Invites</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+          <div class="etog"><span>Friend Requests</span><div class="etog-right"><label class="switch"><input type="checkbox" checked><span class="slider"></span></label><select class="efreq"><option>Daily</option><option>Weekly</option><option>Never</option></select></div></div>
+          <div class="etog"><span>Your Room Summary</span><div class="etog-right"><label class="switch"><input type="checkbox" checked><span class="slider"></span></label><select class="efreq"><option selected>Weekly</option><option>Daily</option><option>Never</option></select></div></div>
+          <div class="etog"><span>New Subscription Rooms</span><div class="etog-right"><label class="switch"><input type="checkbox" checked><span class="slider"></span></label><select class="efreq"><option selected>Weekly</option><option>Daily</option><option>Never</option></select></div></div>
+          <div class="etog"><span>Photos Of You</span><div class="etog-right"><label class="switch"><input type="checkbox" checked><span class="slider"></span></label><select class="efreq"><option>Daily</option><option>Weekly</option><option>Never</option></select></div></div>
+          <div class="etog"><span>Event Invites</span><div class="etog-right"><label class="switch"><input type="checkbox" checked><span class="slider"></span></label><select class="efreq"><option>Daily</option><option>Weekly</option><option>Never</option></select></div></div>
+          <div class="etog"><span>Event Reminders</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+          <div class="srow-save"><button class="btn-dl ssave" data-save="Email">Save</button></div>
+        </section>
+
+        <!-- PASSWORD -->
+        <section class="spanel" data-panel="password">
+          <h2>Password Settings</h2>
+          <div class="sfield"><label>Current Password</label><input id="pwCur" type="password" autocomplete="current-password"></div>
+          <div class="sfield"><label>New Password</label><input id="pwNew" type="password" autocomplete="new-password"></div>
+          <div class="sfield"><label>Confirm New Password</label><input id="pwConf" type="password" autocomplete="new-password"></div>
+          <div class="srow-save"><button class="btn-dl ssave" data-save="Password">Save</button></div>
+        </section>
+
+        <!-- QUICK CHAT: your own phrases for the in-game quick chat menu (settings-quickchat.js) -->
+        <section class="spanel" data-panel="quickchat">
+          <h2>Quick chat</h2>
+          <p class="shint">Pick a set and change any of its phrases. Only you see your phrases in your game, and they show the next time you start the game. Leave a box empty to keep the original phrase. No commas, letters and numbers only, short, and nothing that is not allowed in chat.</p>
+          <div class="sfield"><label for="qcSet">Set</label><select id="qcSet" class="sselect"></select></div>
+          <div id="qcSlots"></div>
+          <p class="shint" id="qcMsg"></p>
+          <div class="srow-save"><button class="btn-dl ssave" id="qcSave" type="button">Save</button> <button class="btn-dl" id="qcReset" type="button">Back to the originals</button></div>
+        </section>
+
+        <!-- DO NOT DISTURB: invites only from favourites for a while (settings-dnd.js) -->
+        <section class="spanel" data-panel="dnd">
+          <h2>Do not disturb</h2>
+          <p class="shint">Turn this on for a while and only your favourites can invite you into a room, and you stop getting "friend is online" notices. It switches itself off when the time is up. Favourite a friend from your friends list to let them through.</p>
+          <p class="shint" id="dndStatus">Checking&hellip;</p>
+          <div class="srow-save" style="flex-wrap:wrap;gap:8px">
+            <button class="btn-dl" type="button" data-dnd="60">1 hour</button>
+            <button class="btn-dl" type="button" data-dnd="120">2 hours</button>
+            <button class="btn-dl" type="button" data-dnd="240">4 hours</button>
+            <button class="btn-dl" type="button" data-dnd="480">8 hours</button>
+            <button class="btn-dl" type="button" data-dnd="1440">24 hours</button>
+            <button class="btn-dl ssave" type="button" data-dnd="0">Turn off</button>
+          </div>
+          <p class="shint" id="dndMsg"></p>
+        </section>
+
+        <!-- SECURITY: two-factor authentication -->
+        <section class="spanel" data-panel="security">
+          <h2>Security</h2>
+          <p style="margin:-6px 0 14px;opacity:.75;font-size:14px">Two-factor authentication: a code from an app on your phone, on top of your password, so a leaked password alone can't sign in to your account.</p>
+
+          <div id="tfaState" class="discord-card" style="align-items:center;">
+            <div class="discord-info"><div class="discord-title">Two-factor authentication</div><div class="discord-status" id="tfaStatusText">Checking&hellip;</div></div>
+            <button id="tfaOnBtn" class="discord-link-btn" style="display:none;">Turn on</button>
+            <button id="tfaOffBtn" class="discord-unlink-btn" style="display:none;">Turn off</button>
+          </div>
+
+          <!-- Step 1: scan or type the key into an authenticator app -->
+          <div id="tfaSetup" style="display:none; margin-top:16px;">
+            <p style="opacity:.85;">Scan this with an authenticator app (Google Authenticator, Authy, 1Password, ...) - or type the key in by hand if you can't scan.</p>
+            <div style="display:flex; gap:20px; flex-wrap:wrap; align-items:flex-start; margin:14px 0;">
+              <div id="tfaQr" style="width:180px; height:180px; background:#fff; border-radius:10px; padding:10px; box-sizing:border-box;"></div>
+              <div style="flex:1; min-width:200px;">
+                <div style="opacity:.7; font-size:13px; margin-bottom:4px;">Manual key</div>
+                <code id="tfaSecret" style="display:block; word-break:break-all; background:rgba(127,127,127,.15); padding:10px 12px; border-radius:8px; user-select:all;"></code>
+              </div>
+            </div>
+            <div class="sfield"><label>Enter the 6-digit code it shows</label><input id="tfaCode" inputmode="numeric" placeholder="123456"></div>
+            <div class="srow-save">
+              <button class="btn-dl ssave" id="tfaConfirmBtn">Confirm</button>
+              <button class="btn-dl" id="tfaCancelBtn" style="background:transparent; border:1px solid rgba(255,255,255,.2);">Cancel</button>
+            </div>
+            <p id="tfaSetupError" style="color:#ff6b6b; min-height:1em; margin-top:8px;"></p>
+          </div>
+
+          <!-- After confirming: the one-time recovery codes -->
+          <div id="tfaRecovery" style="display:none; margin-top:16px;">
+            <p style="color:#f3c969;">Two-factor authentication is on. Save these recovery codes somewhere safe - each works once, instead of a code from your app, if you lose your phone. They won't be shown again.</p>
+            <pre id="tfaRecoveryList" style="background:rgba(127,127,127,.15); padding:14px; border-radius:8px; line-height:1.8;"></pre>
+            <div class="srow-save"><button class="btn-dl ssave" id="tfaRecoveryDoneBtn">Done</button></div>
+          </div>
+        </section>
+
+        <!-- ACCOUNT -->
+        <section class="spanel" data-panel="account">
+          <h2>Account Settings</h2>
+          <p class="account-note">This will sign you out everywhere you're currently logged in.</p>
+          <button class="btn-danger" id="logoutAll">Logout from all devices</button>
+        </section>
+
+        <!-- JUNIORS -->
+        <section class="spanel" data-panel="juniors">
+          <h2>Juniors Settings</h2>
+          <p class="juniors-empty">You don't have any juniors <span class="juniors-face">.</span></p>
+        </section>
+
+        <!-- EXPORT -->
+        <section class="spanel" data-panel="export">
+          <h2>Export</h2>
+          <p style="margin:-6px 0 14px;opacity:.75;font-size:14px">Download a copy of what's on your Campus account. Everything is put together in your browser - nothing is stored on the server.</p>
+          <div class="export-row">
+            <div class="export-info"><div class="export-title">Export Data</div><div class="export-sub">Your profile, avatar, items, friends, settings and progress as a .json file. Passwords, login tokens and private messages are never included.</div></div>
+            <button class="btn-dl export-btn" id="exportData">Export Data</button>
+          </div>
+          <div class="export-row">
+            <div class="export-info"><div class="export-title">Export Rooms</div><div class="export-sub">Rooms you created, with their saved builds, picture and settings, as a .zip. Only rooms you own are listed.</div></div>
+            <button class="btn-dl export-btn" id="exportRooms">Export Rooms</button>
+          </div>
+          <div class="export-row">
+            <div class="export-info"><div class="export-title">Export Photos</div><div class="export-sub">Every photo you took, and every photo you're in, as a .zip.</div></div>
+            <button class="btn-dl export-btn" id="exportPhotos">Export Photos</button>
+          </div>
+          <p class="export-note" id="exportNote" hidden></p>
+        </section>
+
+        <!-- SERVICES: Discord + Spotify -->
+        <section class="spanel" data-panel="services">
+          <h2>Services</h2>
+          <p style="margin:-6px 0 14px;opacity:.75;font-size:14px">Connect other accounts to your Campus profile.</p>
+          <div class="discord-card">
+            <div class="discord-logo" aria-hidden="true">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="#fff"><path d="M20.3 4.4A19.8 19.8 0 0 0 15.4 3l-.25.5a14.5 14.5 0 0 1 4.3 1.4 16.6 16.6 0 0 0-14.9 0A14.5 14.5 0 0 1 8.85 3.5L8.6 3a19.8 19.8 0 0 0-4.9 1.4C.6 9 .07 13.5.34 17.9a19.9 19.9 0 0 0 6 3l.5-.7c-.66-.25-1.28-.55-1.86-.9l.46-.36a14.2 14.2 0 0 0 12.12 0l.46.36c-.58.35-1.2.65-1.86.9l.5.7a19.9 19.9 0 0 0 6-3c.33-5.13-.53-9.6-3.86-13.5ZM8.3 15.3c-1.17 0-2.13-1.08-2.13-2.4 0-1.32.94-2.4 2.13-2.4s2.15 1.08 2.13 2.4c0 1.32-.95 2.4-2.13 2.4Zm7.4 0c-1.17 0-2.13-1.08-2.13-2.4 0-1.32.94-2.4 2.13-2.4s2.15 1.08 2.13 2.4c0 1.32-.94 2.4-2.13 2.4Z"/></svg>
+            </div>
+            <div class="discord-info">
+              <div class="discord-title">Discord</div>
+              <div class="discord-status" id="discordStatusText">Checking&hellip;</div>
+    <label class="svc-show" data-svc="discord" hidden><span>Show on my profile</span><span class="switch"><input type="checkbox" class="svc-show-toggle" data-svc="discord"><span class="slider"></span></span></label>
+            </div>
+            <button id="discordLinkBtn" class="discord-link-btn" style="display:none;">Link Discord</button>
+            <button id="discordUnlinkBtn" class="discord-unlink-btn" style="display:none;">Unlink</button>
+          </div>
+
+          <div class="discord-card spotify-card" style="margin-top:14px">
+            <div class="discord-logo spotify-logo" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="#fff"><path d="M12 1.5C6.2 1.5 1.5 6.2 1.5 12S6.2 22.5 12 22.5 22.5 17.8 22.5 12 17.8 1.5 12 1.5zm4.8 15.2a.65.65 0 0 1-.9.2c-2.5-1.5-5.6-1.9-9.3-1a.65.65 0 1 1-.3-1.3c4-.9 7.5-.5 10.3 1.2.3.2.4.6.2.9zm1.3-2.9a.8.8 0 0 1-1.1.3c-2.8-1.7-7.1-2.2-10.5-1.2a.8.8 0 1 1-.5-1.6c3.8-1.2 8.5-.6 11.8 1.4.4.2.5.7.3 1.1zm.1-3a1 1 0 0 1-1.3.3C13.6 9.2 8.3 9 5.1 10a1 1 0 1 1-.6-1.9c3.7-1.1 9.6-.9 13.4 1.4.5.3.6.9.3 1.3z"/></svg></div>
+            <div class="discord-info">
+              <div class="discord-title">Spotify</div>
+              <div class="discord-status" id="spotifyStatusText">Checking&hellip;</div>
+              <div class="spotify-now" id="spotifyNowPreview" hidden></div>
+              <div class="spotify-vis" id="spotifyVisRow" hidden>
+                <label for="spotifyVis">Show what I'm listening to</label>
+                <select id="spotifyVis">
+                  <option value="0">Everyone</option>
+                  <option value="1">Friends</option>
+                  <option value="2">Favourites only</option>
+                  <option value="3">No one</option>
+                </select>
+              </div>
+              <label class="svc-show" data-svc="spotify" hidden><span>Show on my profile</span><span class="switch"><input type="checkbox" class="svc-show-toggle" data-svc="spotify"><span class="slider"></span></span></label>
+            </div>
+            <button id="spotifyLinkBtn" class="discord-link-btn spotify-link-btn" style="display:none;">Link Spotify</button>
+            <button id="spotifyUnlinkBtn" class="discord-unlink-btn" style="display:none;">Unlink</button>
+          </div>
+
+          <!-- Every other service: sign in with it, we keep the verified handle. Rendered by initSocialCards(). -->
+          <div id="socialCards"></div>
+
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <!-- SEARCH PANEL -->
+  <div class="search-panel" id="searchPanel">
+    <div class="search-card">
+      <div class="search-tabs">
+        <button class="stab active" data-tab="people">People</button>
+        <button class="stab" data-tab="rooms">Rooms</button>
+      </div>
+      <div class="search-field">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.7" y2="16.7"/></svg>
+        <input type="text" id="searchInput" placeholder="Search people…" autocomplete="off">
+      </div>
+      <div class="search-results" id="searchResults"></div>
+    </div>
+  </div>
+  <div class="search-scrim" id="searchScrim"></div>
+
+  <script src="data.js?v=20260927c"></script>
+
+  <script src="app.js?v=20260927c"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+  <script src="settings-2fa.js?v=20261008a"></script>
+  <script src="settings-quickchat.js?v=20261013b"></script>
+  <script src="settings-dnd.js?v=20261013a"></script>
+</body>
+</html>

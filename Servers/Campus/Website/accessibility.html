@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Accessibility - Campus</title>
+  <link rel="icon" type="image/png" href="assets/cat-icon.png">
+  <link rel="apple-touch-icon" href="assets/cat-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=20260927c" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="topbar">
+    <div class="top-left">
+      <button class="side-toggle" id="burger" aria-label="Open menu">
+        <img src="assets/cat-icon.png" alt="Menu" class="burger-cat" id="burgerCat">
+      </button>
+    </div>
+    <div class="top-right">
+      <button class="icon-btn" id="searchBtn" aria-label="Search">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.7" y2="16.7"/></svg>
+      </button>
+      <button class="icon-btn notif-btn" id="notifBtn" aria-label="Notifications">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+        <span class="notif-badge hidden" id="notifBadge"></span>
+      </button>
+      <a href="/login" class="btn-login">Log in</a>
+      <a href="/download" class="btn-dl">DOWNLOAD</a>
+    </div>
+  </header>
+
+  <aside class="cat-drawer" id="catDrawer">
+    <nav class="cd-nav">
+      <a href="/">Home</a>
+      <a href="/rooms">Rooms</a>
+      <a href="/messages">Messages</a>
+      <a href="/#feed">Creative Program</a>
+      <a href="/patch-notes">Patch Notes</a>
+      <a href="/support">Support</a>
+      <a href="/news">News</a>
+      <a href="/challenges">Challenges</a>
+      <a href="/download">Download</a>
+      <a href="https://discord.gg/xH8MMwK5Bk" target="_blank" rel="noopener">Discord</a>
+      <a href="/accessibility">Accessibility</a>
+    </nav>
+    <button class="cd-theme-toggle"></button>
+  </aside>
+  <div class="side-scrim" id="scrim"></div>
+
+  <main id="main" class="a11y-page">
+    <h1 class="a11y-title">Accessibility</h1>
+    <p class="a11y-intro">Tune how Campus looks and feels. These settings are saved on this device and apply across the whole site.</p>
+
+    <div class="a11y-list">
+      <div class="a11y-row">
+        <div class="a11y-text"><span class="a11y-name">Reduce motion</span><span class="a11y-desc">Minimise animations and transitions.</span></div>
+        <button class="cd-a11y a11y-toggle" data-a11y="motion" aria-pressed="false"><span class="cd-a11y-sw"></span></button>
+      </div>
+      <div class="a11y-row">
+        <div class="a11y-text"><span class="a11y-name">Larger text</span><span class="a11y-desc">Increase the base font size for easier reading.</span></div>
+        <button class="cd-a11y a11y-toggle" data-a11y="text" aria-pressed="false"><span class="cd-a11y-sw"></span></button>
+      </div>
+      <div class="a11y-row">
+        <div class="a11y-text"><span class="a11y-name">High contrast</span><span class="a11y-desc">Strengthen borders and text for better visibility.</span></div>
+        <button class="cd-a11y a11y-toggle" data-a11y="contrast" aria-pressed="false"><span class="cd-a11y-sw"></span></button>
+      </div>
+      <div class="a11y-row">
+        <div class="a11y-text"><span class="a11y-name">Underline links</span><span class="a11y-desc">Always underline links so they're easy to spot.</span></div>
+        <button class="cd-a11y a11y-toggle" data-a11y="links" aria-pressed="false"><span class="cd-a11y-sw"></span></button>
+      </div>
+      <div class="a11y-row">
+        <div class="a11y-text"><span class="a11y-name">Readable spacing</span><span class="a11y-desc">Add more space between letters and lines of text.</span></div>
+        <button class="cd-a11y a11y-toggle" data-a11y="spacing" aria-pressed="false"><span class="cd-a11y-sw"></span></button>
+      </div>
+      <div class="a11y-row">
+        <div class="a11y-text"><span class="a11y-name">Dyslexia-friendly font</span><span class="a11y-desc">Switch to a typeface that's easier to read.</span></div>
+        <button class="cd-a11y a11y-toggle" data-a11y="dyslexia" aria-pressed="false"><span class="cd-a11y-sw"></span></button>
+      </div>
+      <div class="a11y-row a11y-pc-only">
+        <div class="a11y-text"><span class="a11y-name">Always show focus outline</span><span class="a11y-desc">Highlight the focused control when navigating by keyboard.</span></div>
+        <button class="cd-a11y a11y-toggle" data-a11y="focus" aria-pressed="false"><span class="cd-a11y-sw"></span></button>
+      </div>
+      <div class="a11y-row a11y-pc-only">
+        <div class="a11y-text"><span class="a11y-name">Larger cursor</span><span class="a11y-desc">Make the mouse pointer bigger and easier to track.</span></div>
+        <button class="cd-a11y a11y-toggle" data-a11y="cursor" aria-pressed="false"><span class="cd-a11y-sw"></span></button>
+      </div>
+      <div class="a11y-row a11y-touch-only">
+        <div class="a11y-text"><span class="a11y-name">Bigger tap targets</span><span class="a11y-desc">Add more space around buttons and links so they're easier to tap.</span></div>
+        <button class="cd-a11y a11y-toggle" data-a11y="taptargets" aria-pressed="false"><span class="cd-a11y-sw"></span></button>
+      </div>
+    </div>
+
+    <div class="a11y-actions">
+      <button class="a11y-toggle-all" id="a11yToggleAll" type="button">Enable all</button>
+      <button class="a11y-reset" id="a11yReset" type="button">Reset all to default</button>
+    </div>
+  </main>
+
+  <!-- SEARCH PANEL -->
+  <div class="search-panel" id="searchPanel">
+    <div class="search-card">
+      <div class="search-tabs">
+        <button class="stab active" data-tab="people">People</button>
+        <button class="stab" data-tab="rooms">Rooms</button>
+      </div>
+      <div class="search-field">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.7" y2="16.7"/></svg>
+        <input type="text" id="searchInput" placeholder="Search people…" autocomplete="off">
+      </div>
+      <div class="search-results" id="searchResults"></div>
+    </div>
+  </div>
+  <div class="search-scrim" id="searchScrim"></div>
+
+  <script src="data.js?v=20260927c"></script>
+  <script src="app.js?v=20260927c"></script>
+</body>
+</html>

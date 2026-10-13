@@ -1,0 +1,17 @@
+# Tachyon config file. Load with:  tachyon --config /etc/tachyon.conf
+# Simple `key = value`; '#' starts a comment. CLI flags override these.
+
+port            = 7777
+encrypt         = true          # RecRoom 0x11 marker layer
+fork            = true          # 24-byte forked NGO batch header
+dissonance      = true          # act as the Dissonance session server
+log_level       = info          # error | warn | info | debug
+
+# Room enforcement: resolve AccountId -> room instance via recflare.
+rooms           = true
+room_url        = https://match.recflare.net/tachyon
+room_timeout_ms = 2000
+
+# RSA private key (path to a file containing .NET RSAKeyValue XML). Its public half is the key
+# the client encrypts AT/VB/CKA/CIA/CPK to; the server decrypts those blobs with this key.
+# private_key   = /etc/tachyon/private-key.xml

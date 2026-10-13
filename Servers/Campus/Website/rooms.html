@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rooms - Campus</title>
+  <link rel="icon" type="image/png" href="assets/cat-icon.png">
+  <link rel="apple-touch-icon" href="assets/cat-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=20260927c" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="topbar">
+    <div class="top-left">
+      <button class="side-toggle" id="burger" aria-label="Open menu">
+        <img src="assets/cat-icon.png" alt="Menu" class="burger-cat" id="burgerCat">
+      </button>
+    </div>
+    <div class="top-right">
+      <button class="icon-btn" id="searchBtn" aria-label="Search">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.7" y2="16.7"/></svg>
+      </button>
+      <button class="icon-btn notif-btn" id="notifBtn" aria-label="Notifications">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+        <span class="notif-badge hidden" id="notifBadge"></span>
+      </button>
+      <a href="/login" class="btn-login">Log in</a>
+      <a href="/download" class="btn-dl">DOWNLOAD</a>
+    </div>
+  </header>
+
+  <aside class="cat-drawer" id="catDrawer">
+    <nav class="cd-nav">
+      <a href="/">Home</a>
+      <a href="/rooms">Rooms</a>
+      <a href="/messages">Messages</a>
+      <a href="/#feed">Creative Program</a>
+      <a href="/patch-notes">Patch Notes</a>
+      <a href="/support">Support</a>
+      <a href="/news">News</a>
+      <a href="/challenges">Challenges</a>
+      <a href="/download">Download</a>
+      <a href="https://discord.gg/xH8MMwK5Bk" target="_blank" rel="noopener">Discord</a>
+      <a href="/accessibility">Accessibility</a>
+    </nav>
+    <button class="cd-theme-toggle"></button>
+  </aside>
+  <div class="side-scrim" id="scrim"></div>
+
+  <main id="main" class="rooms-page">
+    <div class="rooms-head">
+      <div class="rooms-tabs" role="tablist" aria-label="Room lists">
+        <button class="rtab active" data-tab="hot" role="tab" aria-selected="true">Hot</button>
+        <button class="rtab" data-tab="new" role="tab" aria-selected="false">New</button>
+        <button class="rtab" data-tab="rro" role="tab" aria-selected="false">Originals</button>
+      </div>
+      <label class="rooms-filter">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.7" y2="16.7"/></svg>
+        <input type="text" id="roomsFilter" placeholder="Filter rooms…" autocomplete="off">
+      </label>
+      <span class="rooms-count" id="roomsCount"></span>
+    </div>
+    <div class="rooms-grid" id="roomsGrid">
+      <div class="feed-loading">Loading rooms…</div>
+    </div>
+    <div class="rooms-more">
+      <button class="btn-more" id="roomsMore" hidden>Show more</button>
+    </div>
+  </main>
+
+  <!-- SEARCH PANEL -->
+  <div class="search-panel" id="searchPanel">
+    <div class="search-card">
+      <div class="search-tabs">
+        <button class="stab active" data-tab="people">People</button>
+        <button class="stab" data-tab="rooms">Rooms</button>
+      </div>
+      <div class="search-field">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.7" y2="16.7"/></svg>
+        <input type="text" id="searchInput" placeholder="Search people…" autocomplete="off">
+      </div>
+      <div class="search-results" id="searchResults"></div>
+    </div>
+  </div>
+  <div class="search-scrim" id="searchScrim"></div>
+
+  <script src="data.js?v=20260927c"></script>
+  <script src="app.js?v=20260927c"></script>
+</body>
+</html>

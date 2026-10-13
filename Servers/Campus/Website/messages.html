@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Messages - Campus</title>
+  <link rel="icon" type="image/png" href="assets/cat-icon.png">
+  <link rel="apple-touch-icon" href="assets/cat-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=20260927c" />
+  <style>
+    .msg-page{display:flex; margin-top:var(--topbar-h); height:calc(100vh - var(--topbar-h)); min-height:420px;}
+    .msg-list{width:320px; flex:0 0 auto; border-right:1px solid rgba(127,127,127,.2); overflow-y:auto; display:flex; flex-direction:column;}
+    .msg-list-head{display:flex; align-items:center; justify-content:space-between; padding:16px; gap:10px;}
+    .msg-list-head h1{font-size:19px; margin:0;}
+    .msg-new-btn{background:var(--card-hover-bg,#e85d2f); color:#fff; border:none; border-radius:8px; padding:8px 12px; font-weight:600; font-size:13px; cursor:pointer; font-family:inherit;}
+    .msg-thread{display:flex; align-items:center; gap:10px; padding:10px 16px; cursor:pointer; border-left:3px solid transparent; text-align:left; background:none; border-top:none; border-right:none; border-bottom:none; width:100%; color:inherit; font:inherit;}
+    .msg-thread:hover{background:rgba(127,127,127,.08);}
+    .msg-thread.active{background:rgba(127,127,127,.14); border-left-color:var(--card-hover-bg,#e85d2f);}
+    .msg-thread-avs{position:relative; width:42px; height:42px; flex:0 0 auto;}
+    .msg-thread-avs img{width:42px; height:42px; border-radius:50%; object-fit:cover; display:block;}
+    .msg-thread-avs img.msg-av-2{position:absolute; right:-10px; bottom:-10px; width:24px; height:24px; border:2px solid var(--bg,#111);}
+    .msg-thread-meta{min-width:0; flex:1 1 auto;}
+    .msg-thread-name{font-weight:700; font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+    .msg-thread-prev{font-size:13px; opacity:.7; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+    .msg-thread.unread .msg-thread-name{color:var(--card-hover-bg,#e85d2f);}
+    .msg-thread.unread .msg-thread-prev{opacity:1; font-weight:600;}
+    .msg-empty{padding:24px 16px; opacity:.65; font-size:14px;}
+    .msg-conv{flex:1 1 auto; display:flex; flex-direction:column; min-width:0;}
+    .msg-conv-head{padding:16px; border-bottom:1px solid rgba(127,127,127,.2); font-weight:700; display:flex; align-items:center; gap:10px;}
+    .msg-conv-body{flex:1 1 auto; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:10px;}
+    .msg-bubble-row{display:flex; align-items:flex-end; gap:8px; max-width:74%;}
+    .msg-bubble-row.mine{align-self:flex-end; flex-direction:row-reverse;}
+    .msg-bubble-av{width:28px; height:28px; border-radius:50%; object-fit:cover; flex:0 0 auto; margin-bottom:2px;}
+    .msg-bubble-col{display:flex; flex-direction:column; min-width:0;}
+    .msg-bubble-row.mine .msg-bubble-col{align-items:flex-end;}
+    .msg-bubble-sender{font-size:12px; opacity:.6; margin:0 4px 2px;}
+    .msg-bubble{background:rgba(127,127,127,.14); padding:9px 13px; border-radius:14px; font-size:14px; line-height:1.4; white-space:pre-wrap; word-break:break-word;}
+    .msg-bubble-row.mine .msg-bubble{background:var(--card-hover-bg,#e85d2f); color:#fff;}
+    .msg-bubble-row.system{align-self:center; max-width:90%;}
+    .msg-bubble-row.system .msg-bubble{background:none; opacity:.6; font-size:12px; padding:2px;}
+    .msg-bubble-time{font-size:11px; opacity:.5; margin:2px 4px 0;}
+    .msg-conv-foot{display:flex; gap:10px; padding:14px 16px; border-top:1px solid rgba(127,127,127,.2);}
+    .msg-conv-foot textarea{flex:1 1 auto; resize:none; border-radius:10px; border:1px solid rgba(127,127,127,.3); background:transparent; color:inherit; font:inherit; font-size:14px; padding:10px 12px; max-height:120px;}
+    .msg-conv-foot button{background:var(--card-hover-bg,#e85d2f); color:#fff; border:none; border-radius:10px; padding:0 18px; font-weight:600; cursor:pointer; font-family:inherit;}
+    .msg-conv-placeholder{flex:1 1 auto; display:flex; align-items:center; justify-content:center; opacity:.55; font-size:14px; text-align:center; padding:24px;}
+    .msg-new-panel{position:fixed; inset:0; background:rgba(0,0,0,.5); display:none; align-items:center; justify-content:center; z-index:50;}
+    .msg-new-panel.open{display:flex;}
+    .msg-new-card{background:var(--bg,#1b1b1f); border-radius:14px; padding:20px; width:400px; max-width:92vw; max-height:85vh; overflow-y:auto;}
+    .msg-new-card h2{margin:0 0 14px; font-size:18px;}
+    .msg-new-card label{display:block; font-size:13px; opacity:.75; margin:12px 0 5px;}
+    .msg-new-card input[type=text]{width:100%; box-sizing:border-box; padding:9px 11px; border-radius:8px; border:1px solid rgba(127,127,127,.35); background:transparent; color:inherit; font:inherit; font-size:14px;}
+    .msg-new-card textarea{width:100%; box-sizing:border-box; padding:9px 11px; border-radius:8px; border:1px solid rgba(127,127,127,.35); background:transparent; color:inherit; font:inherit; font-size:14px; min-height:60px; resize:vertical;}
+    .msg-chips{display:flex; flex-wrap:wrap; gap:6px; margin-top:8px;}
+    .msg-chip{display:flex; align-items:center; gap:6px; background:rgba(127,127,127,.18); border-radius:999px; padding:4px 6px 4px 10px; font-size:13px;}
+    .msg-chip button{background:none; border:none; color:inherit; cursor:pointer; opacity:.6; font-size:15px; line-height:1; padding:0 2px;}
+    .msg-suggest{margin-top:6px; max-height:160px; overflow-y:auto; border-radius:8px; border:1px solid rgba(127,127,127,.2); display:none;}
+    .msg-suggest.open{display:block;}
+    .msg-suggest-row{display:flex; align-items:center; gap:8px; padding:7px 10px; cursor:pointer; font-size:13px;}
+    .msg-suggest-row:hover{background:rgba(127,127,127,.12);}
+    .msg-suggest-row img{width:26px; height:26px; border-radius:50%; object-fit:cover;}
+    .msg-new-actions{display:flex; justify-content:flex-end; gap:10px; margin-top:18px;}
+    .msg-new-actions button{font-family:inherit; font-size:14px; padding:9px 16px; border-radius:8px; border:none; cursor:pointer;}
+    .msg-new-cancel{background:rgba(127,127,127,.2); color:inherit;}
+    .msg-new-send{background:var(--card-hover-bg,#e85d2f); color:#fff; font-weight:600;}
+    .msg-new-send:disabled{opacity:.5; cursor:not-allowed;}
+    .msg-err{color:#e74c3c; font-size:13px; margin-top:10px; min-height:16px;}
+    @media (max-width: 760px){
+      .msg-page{height:calc(100vh - var(--topbar-h));}
+      .msg-list{width:100%; border-right:none;}
+      .msg-list.has-open{display:none;}
+      .msg-conv{display:none;}
+      .msg-conv.open{display:flex;}
+      .msg-conv-back{display:inline-block !important;}
+    }
+    .msg-conv-back{display:none; background:none; border:none; color:inherit; font-size:20px; cursor:pointer; padding:0 4px 0 0;}
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="topbar">
+    <div class="top-left">
+      <button class="side-toggle" id="burger" aria-label="Open menu">
+        <img src="assets/cat-icon.png" alt="Menu" class="burger-cat" id="burgerCat">
+      </button>
+    </div>
+    <div class="top-right">
+      <button class="icon-btn" id="searchBtn" aria-label="Search">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.7" y2="16.7"/></svg>
+      </button>
+      <button class="icon-btn notif-btn" id="notifBtn" aria-label="Notifications">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+        <span class="notif-badge hidden" id="notifBadge"></span>
+      </button>
+      <a href="/login" class="btn-login">Log in</a>
+      <a href="/download" class="btn-dl">DOWNLOAD</a>
+    </div>
+  </header>
+
+  <aside class="cat-drawer" id="catDrawer">
+    <nav class="cd-nav">
+      <a href="/">Home</a>
+      <a href="/rooms">Rooms</a>
+      <a href="/messages">Messages</a>
+      <a href="/#feed">Creative Program</a>
+      <a href="/patch-notes">Patch Notes</a>
+      <a href="/support">Support</a>
+      <a href="/news">News</a>
+      <a href="/challenges">Challenges</a>
+      <a href="/download">Download</a>
+      <a href="https://discord.gg/xH8MMwK5Bk" target="_blank" rel="noopener">Discord</a>
+      <a href="/accessibility">Accessibility</a>
+    </nav>
+    <button class="cd-theme-toggle"></button>
+  </aside>
+  <div class="side-scrim" id="scrim"></div>
+
+  <main id="main" class="msg-page">
+    <section class="msg-list" id="msgList" aria-label="Conversations">
+      <div class="msg-list-head">
+        <h1>Messages</h1>
+        <button class="msg-new-btn" id="msgNewBtn">New message</button>
+      </div>
+      <div id="msgThreads"><div class="msg-empty">Loading...</div></div>
+    </section>
+
+    <section class="msg-conv" id="msgConv">
+      <div class="msg-conv-placeholder" id="msgPlaceholder">Pick a conversation, or start a new one.</div>
+    </section>
+  </main>
+
+  <div class="msg-new-panel" id="msgNewPanel">
+    <div class="msg-new-card">
+      <h2>New message</h2>
+      <label for="msgNewTo">To</label>
+      <input type="text" id="msgNewTo" placeholder="Search a username..." autocomplete="off">
+      <div class="msg-suggest" id="msgSuggest"></div>
+      <div class="msg-chips" id="msgChips"></div>
+      <label for="msgNewName" id="msgNewNameLabel" hidden>Group name (optional)</label>
+      <input type="text" id="msgNewName" placeholder="Group name" hidden>
+      <label for="msgNewText">Message</label>
+      <textarea id="msgNewText" placeholder="Say something..."></textarea>
+      <div class="msg-err" id="msgNewErr"></div>
+      <div class="msg-new-actions">
+        <button class="msg-new-cancel" id="msgNewCancel">Cancel</button>
+        <button class="msg-new-send" id="msgNewSend">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEARCH PANEL -->
+  <div class="search-panel" id="searchPanel">
+    <div class="search-card">
+      <div class="search-tabs">
+        <button class="stab active" data-tab="people">People</button>
+        <button class="stab" data-tab="rooms">Rooms</button>
+      </div>
+      <div class="search-field">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.7" y2="16.7"/></svg>
+        <input type="text" id="searchInput" placeholder="Search people…" autocomplete="off">
+      </div>
+      <div class="search-results" id="searchResults"></div>
+    </div>
+  </div>
+  <div class="search-scrim" id="searchScrim"></div>
+
+  <script src="data.js?v=20260927c"></script>
+  <script src="app.js?v=20260927c"></script>
+  <script src="messages.js?v=20261008c"></script>
+</body>
+</html>

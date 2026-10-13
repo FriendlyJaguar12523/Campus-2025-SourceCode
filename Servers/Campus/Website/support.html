@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Campus Support</title>
+  <link rel="icon" type="image/png" href="assets/cat-icon.png">
+  <link rel="apple-touch-icon" href="assets/cat-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=20260927c" />
+  <style>
+    /* ── page shell (clears the fixed topbar, centred column) ── */
+    .sup-page{max-width:720px;margin:0 auto;padding:calc(var(--topbar-h) + 34px) 20px 96px;}
+
+    /* ── hero ── */
+    .sup-hero{position:relative;text-align:center;padding:34px 24px 30px;border-radius:24px;
+      border:1px solid var(--line);overflow:hidden;margin-bottom:22px;
+      background:radial-gradient(ellipse 80% 120% at 50% -20%, var(--primary-soft), transparent 68%), var(--card);}
+    .sup-hero .hero-ic{width:60px;height:60px;border-radius:19px;display:grid;place-items:center;margin:0 auto 15px;
+      background:var(--gradient-main);box-shadow:0 10px 24px rgba(207,40,96,.30);}
+    .sup-hero .hero-ic svg{width:31px;height:31px;color:#fff;}
+    .sup-hero h1{font-size:2rem;font-weight:800;letter-spacing:-.03em;margin:0 0 7px;}
+    .sup-hero p{color:var(--muted);font-weight:600;line-height:1.55;margin:0 auto;max-width:470px;}
+
+    /* ── tabs (mirrors the site's .utab pills) ── */
+    .sup-tabs{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:18px;}
+    .sup-tabs button{cursor:pointer;font:inherit;font-weight:700;font-size:.9rem;padding:9px 18px;border-radius:999px;
+      background:var(--card);border:1px solid var(--line);color:var(--text);display:inline-flex;align-items:center;gap:8px;
+      transition:border-color .15s,color .15s,background .15s;}
+    .sup-tabs button:hover{border-color:var(--primary);color:var(--primary);}
+    .sup-tabs button.active{background:var(--gradient-main);border-color:transparent;color:#fff;}
+    .sup-tabs button[hidden],.pill[hidden]{display:none !important;} /* author display: rules otherwise beat [hidden] */
+    .sup-tabs .pill{min-width:20px;padding:1px 7px;border-radius:999px;font-size:.76rem;font-weight:800;
+      background:var(--primary);color:#fff;line-height:1.5;}
+    .sup-tabs button.active .pill{background:rgba(255,255,255,.3);}
+
+    .panel{display:none;} .panel.active{display:block;animation:fade .22s ease;}
+    @keyframes fade{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:none;}}
+
+    /* ── surface card ── */
+    .surface{background:var(--card);border:1px solid var(--line);border-radius:20px;
+      box-shadow:0 10px 30px rgba(0,0,0,.05);overflow:hidden;}
+
+    /* ── assistant header ── */
+    .asst-head{display:flex;align-items:center;gap:13px;padding:16px 18px;border-bottom:1px solid var(--line);background:var(--panel);}
+    .asst-av{width:42px;height:42px;border-radius:13px;flex:none;background:var(--gradient-main);display:grid;place-items:center;}
+    .asst-av img{width:28px;height:28px;object-fit:contain;filter:brightness(0) invert(1);}
+    .asst-name{font-weight:800;font-size:1rem;line-height:1.1;}
+    .asst-sub{font-size:.8rem;color:var(--muted);font-weight:600;display:flex;align-items:center;gap:6px;margin-top:3px;}
+    .asst-dot{width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 3px rgba(34,197,94,.2);}
+
+    /* ── chat ── */
+    .chat{display:flex;flex-direction:column;gap:11px;padding:18px;}
+    .msg{max-width:90%;padding:11px 14px;border-radius:16px;line-height:1.5;font-size:.96rem;white-space:pre-wrap;color:var(--text);}
+    .msg.bot{align-self:flex-start;background:var(--panel);border:1px solid var(--line);border-top-left-radius:5px;}
+    .msg.me{align-self:flex-end;background:var(--gradient-main);color:#fff;border-top-right-radius:5px;font-weight:600;}
+    .choices{display:flex;flex-wrap:wrap;gap:8px;}
+    .choice{cursor:pointer;font:inherit;font-weight:600;font-size:.9rem;padding:9px 14px;border-radius:999px;
+      border:1px solid var(--line);background:var(--card);color:var(--text);text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:.15s;}
+    .choice:hover{border-color:var(--primary);color:var(--primary);background:var(--primary-soft);}
+    .choice.primary{background:var(--gradient-main);border-color:transparent;color:#fff;}
+    .choice.primary:hover{filter:brightness(1.07);color:#fff;background:var(--gradient-main);}
+    .choice.ghost{color:var(--muted);border-style:dashed;}
+    .choice.ghost:hover{color:var(--primary);background:transparent;border-color:var(--primary);}
+    .typing{display:inline-flex;gap:4px;padding:2px 0;}
+    .typing span{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:.5;animation:tp 1s infinite;}
+    .typing span:nth-child(2){animation-delay:.15s;} .typing span:nth-child(3){animation-delay:.3s;}
+    @keyframes tp{0%,60%,100%{transform:translateY(0);opacity:.35;}30%{transform:translateY(-4px);opacity:.9;}}
+
+    /* ── talk-to-human CTA (panel footer) ── */
+    .human-bar{padding:14px 18px;border-top:1px solid var(--line);background:var(--panel);}
+    .human-btn{width:100%;display:inline-flex;align-items:center;justify-content:center;gap:9px;cursor:pointer;border:none;
+      font:inherit;font-weight:800;font-size:.98rem;padding:14px;border-radius:14px;background:var(--gradient-main);color:#fff;
+      box-shadow:0 8px 20px rgba(207,40,96,.26);transition:transform .15s,box-shadow .15s,filter .15s;}
+    .human-btn:hover{transform:translateY(-1px);box-shadow:0 12px 26px rgba(207,40,96,.34);filter:brightness(1.03);}
+    .human-btn svg{width:19px;height:19px;}
+
+    /* ── fields ── */
+    .field{font:inherit;font-size:.95rem;padding:12px 14px;border:1px solid var(--line);border-radius:12px;
+      background:var(--bg);color:var(--text);width:100%;box-sizing:border-box;transition:border-color .15s;}
+    .field:focus{outline:none;border-color:var(--primary);}
+    .field::placeholder{color:var(--muted);}
+    textarea.field{min-height:104px;resize:vertical;}
+    .row-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:11px;}
+    .note{font-size:.85rem;color:var(--muted);}
+    .discord-link{color:#5865F2;font-weight:700;text-decoration:none;}
+    .discord-link:hover{text-decoration:underline;}
+
+    /* ── ticket panels ── */
+    .panel-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px;}
+    .panel-top h2{font-size:1.2rem;font-weight:800;margin:0;}
+    .btn-new{cursor:pointer;font:inherit;font-weight:700;font-size:.9rem;padding:10px 16px;border-radius:11px;border:none;
+      background:var(--gradient-main);color:#fff;display:inline-flex;align-items:center;gap:7px;box-shadow:0 6px 16px rgba(207,40,96,.24);transition:transform .12s,box-shadow .15s;}
+    .btn-new:hover{transform:translateY(-1px);box-shadow:0 10px 22px rgba(207,40,96,.3);}
+
+    /* segmented staff filter */
+    .subfilter{display:inline-flex;gap:4px;padding:4px;border-radius:999px;background:var(--panel);border:1px solid var(--line);margin-bottom:16px;}
+    .subfilter button{cursor:pointer;font:inherit;font-weight:700;font-size:.84rem;padding:7px 15px;border-radius:999px;border:none;background:transparent;color:var(--muted);transition:.12s;}
+    .subfilter button:hover{color:var(--text);}
+    .subfilter button.active{background:var(--card);color:var(--text);box-shadow:0 1px 5px rgba(0,0,0,.1);}
+
+    /* ticket rows */
+    .tlist{display:flex;flex-direction:column;gap:12px;}
+    .trow{display:flex;align-items:flex-start;gap:14px;padding:16px 18px;border:1px solid var(--line);border-radius:16px;
+      background:var(--card);cursor:pointer;transition:border-color .15s,transform .12s,box-shadow .15s;}
+    .trow:hover{border-color:var(--primary);transform:translateY(-2px);box-shadow:0 8px 22px rgba(0,0,0,.07);}
+    .trow .tnum{flex:none;width:46px;height:46px;border-radius:13px;background:var(--primary-soft);color:var(--primary);
+      display:grid;place-items:center;font-weight:800;font-size:.82rem;}
+    .trow .tmain{flex:1;min-width:0;}
+    .trow .tsub{font-weight:800;font-size:.98rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .trow .tprev{color:var(--muted);font-size:.88rem;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .trow .tmeta{color:var(--muted);font-size:.78rem;font-weight:600;margin-top:7px;display:flex;gap:10px;flex-wrap:wrap;}
+    .trow .tmeta .who{color:var(--primary);font-weight:700;}
+    .badge{flex:none;font-size:.7rem;font-weight:800;padding:5px 11px;border-radius:999px;text-transform:uppercase;letter-spacing:.05em;}
+    .badge.open{background:rgba(34,197,94,.14);color:#15803d;}
+    .badge.closed{background:var(--panel);color:var(--muted);}
+    [data-theme="dark"] .badge.open{background:rgba(34,197,94,.2);color:#5fd27f;}
+
+    /* empty state */
+    .empty{color:var(--muted);text-align:center;padding:46px 20px;font-weight:600;}
+    .empty svg{width:40px;height:40px;opacity:.35;margin-bottom:12px;display:block;margin-left:auto;margin-right:auto;}
+
+    /* ── thread modal ── */
+    .modal-scrim{position:fixed;inset:0;background:rgba(10,8,20,.55);backdrop-filter:blur(3px);display:none;z-index:200;}
+    .modal-scrim.open{display:block;}
+    .modal{position:fixed;z-index:201;left:50%;top:50%;transform:translate(-50%,-50%) scale(.98);opacity:0;
+      width:min(820px,95vw);max-height:90vh;min-height:min(600px,86vh);background:var(--card);border:1px solid var(--line);border-radius:20px;
+      box-shadow:0 30px 80px rgba(0,0,0,.4);display:none;flex-direction:column;overflow:hidden;transition:opacity .16s,transform .16s;}
+    .modal.open{display:flex;opacity:1;transform:translate(-50%,-50%) scale(1);}
+    .modal-head{display:flex;align-items:center;gap:12px;padding:16px 18px;border-bottom:1px solid var(--line);}
+    .modal-head .mnum{flex:none;width:40px;height:40px;border-radius:11px;background:var(--primary-soft);color:var(--primary);display:grid;place-items:center;font-weight:800;font-size:.78rem;}
+    .modal-head .mtitle{flex:1;min-width:0;}
+    .modal-head h3{margin:0;font-size:1.05rem;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .modal-head .msub{font-size:.8rem;color:var(--muted);font-weight:600;margin-top:2px;}
+    .modal-x{cursor:pointer;border:none;background:transparent;font-size:1.5rem;line-height:1;color:var(--muted);padding:2px 4px;}
+    .modal-x:hover{color:var(--text);}
+    .mtoggle{cursor:pointer;font:inherit;font-weight:700;font-size:.82rem;padding:8px 13px;border-radius:999px;
+      border:1px solid var(--line);background:var(--card);color:var(--muted);white-space:nowrap;transition:.12s;}
+    .mtoggle:hover{border-color:var(--primary);color:var(--primary);}
+    .thread{flex:1;overflow:auto;padding:18px;display:flex;flex-direction:column;gap:14px;background:var(--page);}
+    /* structured "ticket details" panel parsed from the opening message */
+    .tdetails{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:15px 17px;}
+    .tdetails .dh{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:11px;display:flex;align-items:center;gap:7px;}
+    .tdetails .dh svg{width:15px;height:15px;color:var(--primary);}
+    .tdetails dl{display:grid;grid-template-columns:auto 1fr;gap:9px 18px;margin:0;}
+    .tdetails dt{color:var(--muted);font-size:.86rem;font-weight:700;white-space:nowrap;}
+    .tdetails dd{margin:0;font-size:.95rem;font-weight:600;color:var(--text);word-break:break-word;}
+    .tdetails dd.at{color:var(--primary);}
+    /* messages: avatar + bubble */
+    .msgrow{display:flex;gap:9px;max-width:86%;}
+    .msgrow.user{align-self:flex-start;}
+    .msgrow.staff{align-self:flex-end;flex-direction:row-reverse;}
+    .msgrow .bcol{display:flex;flex-direction:column;gap:3px;min-width:0;}
+    .msgrow.staff .bcol{align-items:flex-end;}
+    .av-sm{width:44px;height:44px;border-radius:50%;flex:none;display:grid;place-items:center;font-weight:800;font-size:1rem;margin-top:22px;text-transform:uppercase;overflow:hidden;}
+    .av-sm.staff{background:var(--gradient-main);color:#fff;}
+    .av-sm.user{background:var(--primary-soft);color:var(--primary);}
+    /* photo avatars: round, cropped to fill — same as the profile-page avatars */
+    .av-sm.img{background-color:var(--panel);background-size:cover;background-repeat:no-repeat;background-position:center;}
+    .who{font-size:.75rem;color:var(--muted);font-weight:700;padding:0 4px;}
+    .bubble{padding:12px 15px;border-radius:15px;font-size:1rem;white-space:pre-wrap;line-height:1.5;color:var(--text);max-width:100%;}
+    .bubble.user{background:var(--card);border:1px solid var(--line);border-top-left-radius:5px;}
+    .bubble.staff{background:var(--gradient-main);color:#fff;border-top-right-radius:5px;}
+    .modal-foot{border-top:1px solid var(--line);padding:13px 16px;background:var(--panel);}
+    .modal-foot .row{display:flex;gap:10px;align-items:flex-end;}
+    .modal-foot textarea.field{min-height:44px;max-height:140px;background:var(--card);}
+    .mfoot-closed{text-align:center;color:var(--muted);font-size:.88rem;font-weight:600;padding:4px 0;}
+    .btn-send{cursor:pointer;border:none;font:inherit;font-weight:700;padding:12px 18px;border-radius:12px;
+      background:var(--gradient-main);color:#fff;flex:none;transition:filter .12s,transform .12s;}
+    .btn-send:hover{filter:brightness(1.06);transform:translateY(-1px);}
+    .btn-send:disabled{opacity:.5;cursor:default;transform:none;}
+
+    /* ── create-ticket form modal ── */
+    .modal-body{padding:18px;overflow:auto;display:flex;flex-direction:column;gap:15px;}
+    .frow{display:flex;flex-direction:column;gap:6px;}
+    .fl{font-size:.85rem;font-weight:700;color:var(--text);}
+    .fl .rq{color:#e11d48;margin-left:3px;} .fl .opt{color:var(--muted);font-weight:600;font-size:.8rem;margin-left:4px;}
+    .fhint{font-size:.78rem;color:var(--muted);}
+    .at-field{display:flex;align-items:center;border:1px solid var(--line);border-radius:12px;background:var(--bg);overflow:hidden;transition:border-color .15s;}
+    .at-field:focus-within{border-color:var(--primary);}
+    .at-field .at{padding:0 2px 0 13px;color:var(--muted);font-weight:700;}
+    .at-field input{flex:1;border:none;background:transparent;color:var(--text);font:inherit;font-size:.95rem;padding:12px 13px 12px 4px;outline:none;}
+    select.field{appearance:none;-webkit-appearance:none;cursor:pointer;padding-right:38px;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%238a8a90' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat:no-repeat;background-position:right 13px center;}
+    .tform-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:2px;}
+    .modal-login{padding:30px 22px;text-align:center;}
+    .modal-login p{color:var(--muted);font-weight:600;margin:0 0 18px;line-height:1.55;}
+    .modal-login .choices{justify-content:center;}
+
+    /* ── assistant: free-text question box ── */
+    .ask-bar{display:flex;gap:10px;padding:14px 18px;border-top:1px solid var(--line);background:var(--card);}
+    .ask-bar .field{flex:1;padding:11px 14px;}
+    .ask-bar .btn-send{padding:11px 16px;}
+    .choice.small{font-size:.84rem;padding:7px 12px;}
+    .msg.bot a{color:var(--primary);font-weight:700;}
+    .status-card{align-self:stretch;max-width:100%;border-radius:14px;padding:13px 15px;font-size:.93rem;line-height:1.5;border:1px solid var(--line);background:var(--card);}
+    .status-card.bad{border-color:rgba(225,29,72,.35);background:rgba(225,29,72,.07);}
+    .status-card.ok{border-color:rgba(34,197,94,.35);background:rgba(34,197,94,.07);}
+    .status-card b{display:block;margin-bottom:3px;}
+
+    /* ── ticket rows: topic chip, unread dot, whose turn ── */
+    .chip{display:inline-flex;align-items:center;font-size:.72rem;font-weight:800;padding:3px 9px;border-radius:999px;background:var(--panel);color:var(--muted);border:1px solid var(--line);}
+    .chip.appeal{background:rgba(225,29,72,.1);color:#e11d48;border-color:transparent;}
+    .chip.report_player,.chip.report_room{background:rgba(245,158,11,.12);color:#b45309;border-color:transparent;}
+    .chip.bug{background:rgba(59,130,246,.12);color:#2563eb;border-color:transparent;}
+    [data-theme="dark"] .chip.report_player,[data-theme="dark"] .chip.report_room{color:#fbbf24;}
+    [data-theme="dark"] .chip.bug{color:#60a5fa;}
+    .trow.unread{border-color:var(--primary);box-shadow:0 0 0 1px var(--primary) inset;}
+    .trow .tsubline{display:flex;align-items:center;gap:8px;min-width:0;}
+    .trow .tsubline .tsub{flex:1;min-width:0;}
+    .dot-new{flex:none;font-size:.68rem;font-weight:800;padding:2px 8px;border-radius:999px;background:var(--primary);color:#fff;text-transform:uppercase;letter-spacing:.04em;}
+    .turn{font-weight:700;}
+    .turn.staff{color:#d97706;} .turn.player{color:var(--primary);}
+    .badge.waiting{background:rgba(245,158,11,.14);color:#b45309;}
+    [data-theme="dark"] .badge.waiting{color:#fbbf24;}
+
+    /* ── staff toolbar ── */
+    .staff-tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:16px;}
+    .staff-tools .subfilter{margin-bottom:0;}
+    .staff-tools .field{width:auto;padding:9px 13px;font-size:.88rem;}
+    .staff-tools input.field{flex:1;min-width:180px;}
+    .toggle-chip{cursor:pointer;font:inherit;font-weight:700;font-size:.82rem;padding:8px 13px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--muted);}
+    .toggle-chip.on{border-color:var(--primary);color:var(--primary);background:var(--primary-soft);}
+
+    /* ── thread extras ── */
+    .sysmsg{align-self:center;font-size:.78rem;font-weight:700;color:var(--muted);background:var(--card);border:1px solid var(--line);padding:5px 12px;border-radius:999px;text-align:center;max-width:90%;}
+    .sysmsg.internal{border-style:dashed;}
+    .bubble.note{background:rgba(245,158,11,.1);border:1px dashed rgba(245,158,11,.6);color:var(--text);border-top-right-radius:5px;}
+    .msgrow.note .who{color:#b45309;}
+    [data-theme="dark"] .msgrow.note .who{color:#fbbf24;}
+    .att-grid{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;}
+    .msgrow.staff .att-grid{justify-content:flex-end;}
+    .att-grid a{display:block;width:120px;height:90px;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:var(--panel);}
+    .att-grid img{width:100%;height:100%;object-fit:cover;display:block;}
+    .pcard{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 16px;display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;font-size:.86rem;}
+    .pcard .pname{font-weight:800;font-size:.95rem;margin-right:auto;}
+    .pcard .pname small{color:var(--muted);font-weight:600;margin-left:6px;}
+    .pcard .pk{color:var(--muted);font-weight:700;}
+    .pcard .bad{color:#e11d48;font-weight:800;}
+    .pcard a{color:var(--primary);font-weight:700;text-decoration:none;}
+    .claim-btn{cursor:pointer;font:inherit;font-weight:700;font-size:.82rem;padding:8px 13px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--muted);white-space:nowrap;}
+    .claim-btn:hover{border-color:var(--primary);color:var(--primary);}
+    .claim-btn.mine{border-color:var(--primary);color:var(--primary);background:var(--primary-soft);}
+    .foot-tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:9px;}
+    .foot-tools select.field{width:auto;padding:7px 34px 7px 11px;font-size:.84rem;}
+    .icon-btn-sm{cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--muted);border-radius:10px;padding:7px 11px;font:inherit;font-weight:700;font-size:.84rem;display:inline-flex;align-items:center;gap:6px;}
+    .icon-btn-sm:hover{border-color:var(--primary);color:var(--primary);}
+    .icon-btn-sm.on{border-color:#d97706;color:#d97706;background:rgba(245,158,11,.1);}
+    .pending-att{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:9px;}
+    .pending-att:empty{display:none;}
+    .pending-att .pa{position:relative;width:64px;height:48px;border-radius:8px;overflow:hidden;border:1px solid var(--line);}
+    .pending-att .pa img{width:100%;height:100%;object-fit:cover;}
+    .pending-att .pa button{position:absolute;top:2px;right:2px;border:none;border-radius:50%;width:18px;height:18px;line-height:16px;font-size:13px;cursor:pointer;background:rgba(0,0,0,.6);color:#fff;padding:0;}
+    .pending-att .pa.busy{opacity:.5;}
+    .modal-foot.note-mode textarea.field{border-color:#d97706;background:rgba(245,158,11,.06);}
+    .limit-note{font-size:.84rem;color:var(--muted);font-weight:600;}
+    @media (max-width:640px){ .staff-tools input.field{min-width:100%;} .att-grid a{width:96px;height:72px;} }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="topbar">
+    <div class="top-left">
+      <button class="side-toggle" id="burger" aria-label="Open menu"><img src="assets/cat-icon.png" alt="Menu" class="burger-cat" id="burgerCat"></button>
+    </div>
+    <div class="top-right">
+      <button class="icon-btn" id="searchBtn" aria-label="Search"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.7" y2="16.7"/></svg></button>
+      <button class="icon-btn notif-btn" id="notifBtn" aria-label="Notifications"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><span class="notif-badge hidden" id="notifBadge"></span></button>
+      <a href="/login" class="btn-login">Log in</a>
+      <a href="/download" class="btn-dl">DOWNLOAD</a>
+    </div>
+  </header>
+
+  <aside class="cat-drawer" id="catDrawer">
+    <nav class="cd-nav">
+      <a href="/">Home</a>
+      <a href="/rooms">Rooms</a>
+      <a href="/messages">Messages</a>
+      <a href="/#feed">Creative Program</a>
+      <a href="/patch-notes">Patch Notes</a>
+      <a href="/support">Support</a>
+      <a href="/news">News</a>
+      <a href="/challenges">Challenges</a>
+      <a href="/download">Download</a>
+      <a href="https://discord.gg/xH8MMwK5Bk" target="_blank" rel="noopener">Discord</a>
+      <a href="/accessibility">Accessibility</a>
+    </nav>
+    <button class="cd-theme-toggle"></button>
+  </aside>
+  <div class="side-scrim" id="scrim"></div>
+
+  <main id="main">
+    <div class="sup-page">
+
+      <div class="sup-hero">
+        <div class="hero-ic">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        </div>
+        <h1>How can we help?</h1>
+        <p>Ask the assistant anything — type a question or pick a topic. If it can't help, open a ticket and a real member of the Campus team will reply here.</p>
+      </div>
+
+      <div class="sup-tabs" id="tabs">
+        <button data-tab="help" class="active">Help assistant</button>
+        <button data-tab="mine" id="tabMine" hidden>My tickets <span class="pill" id="minePill" hidden>0</span></button>
+        <button data-tab="staff" id="tabStaff" hidden>All tickets <span class="pill" id="openPill" hidden>0</span></button>
+      </div>
+
+      <!-- HELP ASSISTANT -->
+      <section class="panel active" id="panel-help">
+        <div class="surface">
+          <div class="asst-head">
+            <div class="asst-av"><img src="assets/cat-icon.png" alt=""></div>
+            <div>
+              <div class="asst-name">Vanessa</div>
+              <div class="asst-sub"><span class="asst-dot"></span> Answers common questions instantly</div>
+            </div>
+          </div>
+          <div class="chat" id="chat"></div>
+          <form class="ask-bar" id="askForm" autocomplete="off">
+            <input class="field" id="askInput" maxlength="200" placeholder="Type your question… e.g. “I forgot my password”" aria-label="Ask a question">
+            <button class="btn-send" type="submit">Ask</button>
+          </form>
+          <div class="human-bar">
+            <button class="human-btn" id="humanBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              Talk to a real person
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- MY TICKETS -->
+      <section class="panel" id="panel-mine">
+        <div class="panel-top">
+          <h2>My tickets</h2>
+          <button class="btn-new" id="newTicketBtn"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> New ticket</button>
+        </div>
+        <div class="tlist" id="mineList"></div>
+      </section>
+
+      <!-- STAFF: ALL TICKETS -->
+      <section class="panel" id="panel-staff">
+        <div class="panel-top"><h2>All tickets</h2></div>
+        <div class="staff-tools">
+          <div class="subfilter" id="staffFilter">
+            <button data-status="open" class="active">Open</button>
+            <button data-status="closed">Closed</button>
+            <button data-status="all">All</button>
+          </div>
+          <select class="field" id="staffCat" aria-label="Topic"></select>
+          <input class="field" id="staffQ" placeholder="Search #id, @username or subject" aria-label="Search tickets">
+        </div>
+        <div class="staff-tools">
+          <button type="button" class="toggle-chip" data-f="waiting">Waiting on staff</button>
+          <button type="button" class="toggle-chip" data-f="mine">Claimed by me</button>
+          <button type="button" class="toggle-chip" data-f="unclaimed">Unclaimed</button>
+        </div>
+        <div class="tlist" id="staffList"></div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- THREAD MODAL -->
+  <div class="modal-scrim" id="scrimM"></div>
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+    <div class="modal-head">
+      <div class="mnum" id="mNum">#</div>
+      <div class="mtitle"><h3 id="mTitle">Ticket</h3><div class="msub" id="mSub"></div></div>
+      <span class="badge" id="mBadge" hidden></span>
+      <button class="claim-btn" id="mClaim" hidden>Claim</button>
+      <button class="mtoggle" id="mToggle" hidden>Close ticket</button>
+      <button class="modal-x" id="mClose" aria-label="Close">&times;</button>
+    </div>
+    <div class="thread" id="thread"></div>
+    <div class="modal-foot" id="mFoot">
+      <div class="row">
+        <textarea class="field" id="mReply" placeholder="Write a reply…" rows="1"></textarea>
+        <button class="btn-send" id="mSend">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CREATE-TICKET MODAL (centred overlay, like the in-game report dialog) -->
+  <div class="modal-scrim" id="scrimT"></div>
+  <div class="modal" id="tmodal" role="dialog" aria-modal="true" aria-labelledby="tmTitle">
+    <div class="modal-head">
+      <div class="mnum"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16a2 2 0 0 1 2 2v4a2 2 0 0 0 0 4v4a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-4a2 2 0 0 0 0-4V6a2 2 0 0 1 2-2z"/><path d="M9 4v16"/></svg></div>
+      <div class="mtitle"><h3 id="tmTitle">Open a support ticket</h3><div class="msub">A real member of the team will reply here on the website.</div></div>
+      <button class="modal-x" id="tmClose" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-body" id="tmBody"></div>
+  </div>
+
+  <!-- SEARCH PANEL (nav parity) -->
+  <div class="search-panel" id="searchPanel"><div class="search-card"><div class="search-tabs"><button class="stab active" data-tab="people">People</button><button class="stab" data-tab="rooms">Rooms</button></div><div class="search-field"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.7" y2="16.7"/></svg><input type="text" id="searchInput" placeholder="Search people…" autocomplete="off"></div><div class="search-results" id="searchResults"></div></div></div>
+  <div class="search-scrim" id="searchScrim"></div>
+
+  <script src="data.js?v=20260927c"></script>
+  <script src="app.js?v=20260927c"></script>
+  <script>
+  (function () {
+    const DISCORD = "https://discord.gg/xH8MMwK5Bk";
+    const chat = document.getElementById('chat');
+    const state = { signedIn:false, staff:false, username:"", currentTicket:null, role:null };
+
+    const el = (tag, cls, html) => { const e=document.createElement(tag); if(cls)e.className=cls; if(html!=null)e.innerHTML=html; return e; };
+    const esc = s => (s==null?"":String(s)).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const when = s => { try { return new Date(s).toLocaleString(); } catch { return ""; } };
+    function ago(s){ try{ const d=(Date.now()-new Date(s).getTime())/1000; if(d<60)return"just now";
+      if(d<3600)return Math.floor(d/60)+"m ago"; if(d<86400)return Math.floor(d/3600)+"h ago";
+      if(d<604800)return Math.floor(d/86400)+"d ago"; return new Date(s).toLocaleDateString(); }catch{return"";} }
+    function span(sec){ if(sec==null) return "permanently"; sec=Math.max(0,Math.floor(sec));
+      const d=Math.floor(sec/86400), h=Math.floor(sec%86400/3600), m=Math.floor(sec%3600/60);
+      return d? d+"d "+h+"h" : h? h+"h "+m+"m" : Math.max(1,m)+" min"; }
+    async function jget(u){ try{ const r=await fetch(u,{credentials:'same-origin'}); return r.ok?r.json():null; }catch{ return null; } }
+    async function jpost(u,b){ const r=await fetch(u,{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:b?JSON.stringify(b):null}); let j=null; try{j=await r.json();}catch{} return {ok:r.ok,status:r.status,body:j}; }
+
+    // ---------- tabs ----------
+    const tabs = document.getElementById('tabs');
+    function showTab(name){
+      tabs.querySelectorAll('button').forEach(b=>b.classList.toggle('active', b.dataset.tab===name));
+      document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active', p.id==='panel-'+name));
+      if(name==='mine') loadMine();
+      if(name==='staff') loadStaff();
+    }
+    tabs.addEventListener('click', e => { const b=e.target.closest('button'); if(b&&b.dataset.tab && !b.hidden) showTab(b.dataset.tab); });
+
+    // ======================================================================================
+    // ASSISTANT
+    // Answers are data (FAQ); menus (TREE) point at them; typed questions are matched against
+    // their keywords. Anything unanswered ends in "open a ticket" with the question carried over.
+    // ======================================================================================
+    const FAQ = {
+      make_account:{ q:"How do I make an account?", kw:"make create new account sign up signup register join",
+        a:"Accounts are made here on the website: tap Sign up, pick a username and password, then log in inside the game with that same username and password. The first time you log in on a device, the account is locked to it (one game account + one website account per device).", cat:"account" },
+      cant_login:{ q:"I can't log in", kw:"cant can't login log in sign in signin unable error wrong password incorrect locked device",
+        a:"Check you're typing the exact username and password you made on the website. If the game says the account is tied to another device, that's the one-account-per-device lock — open a ticket and we'll sort it. Too many wrong passwords locks logins for a few minutes, so wait before trying again.", cat:"account" },
+      forgot_pw:{ q:"I forgot my password", kw:"forgot forgotten reset password lost recover recovery",
+        a:"We can reset it. Open a ticket (Account / login) with your username and roughly when you made the account, and a staff member will help you get back in.", cat:"account" },
+      change_name:{ q:"How do I change my name or picture?", kw:"change name username display nickname rename profile picture avatar photo bio banner",
+        a:"On the website: Settings → Profile for your display name and bio, and tap your profile picture or banner on your profile page to change them. In-game changes show up on the website too. (If your account is banned, changes are blocked until the ban ends.)", cat:"account" },
+      join_friend:{ q:"I can't join my friend", kw:"join friend friends follow cant can't unable room full private",
+        a:"You both need to be online, and they need to be in a room you're allowed into — private rooms need you to be friends or invited, and full rooms put you in another copy of the room. Try again from their player card; if it keeps failing, open a ticket and say who you tried to join.", cat:"join" },
+      invites:{ q:"Invites aren't working", kw:"invite invites party parties button",
+        a:"Send invites from the friends list or a party. The other player must be online and not appearing offline. If the invite button does nothing, open a ticket.", cat:"join" },
+      change_rooms:{ q:"“Unable to change rooms”", kw:"unable change rooms room loading stuck load failed",
+        a:"That usually clears on a retry. If it happens every time, open a ticket saying what you were joining (a player, an invite, or an event) and roughly when.", cat:"join" },
+      reward:{ q:"I didn't get my reward", kw:"reward rewards xp level tokens not get missing didnt didn't",
+        a:"Rewards are given when you finish an activity in its room; some are a pick-one-of-three on your watch. If one truly never showed up, open a ticket with the game mode and roughly when.", cat:"econ" },
+      giftbox:{ q:"How do gift boxes work?", kw:"gift box boxes open present unwrap",
+        a:"Finish a supported game mode and you're offered a gift box — open it from your watch and the item goes to your inventory. Staff can also send gift boxes.", cat:"econ" },
+      balance:{ q:"My balance looks wrong", kw:"balance currency tokens money coins gold silver wrong missing",
+        a:"Balances are saved to your account. If a number looks off, open a ticket with a screenshot of what you see and what you expected.", cat:"econ" },
+      report_player:{ q:"Report a player", kw:"report player harass harassment bully toxic cheat cheating hacker hacking",
+        a:"For anything happening right now, use the in-game report on their player card — it reaches the moderators straight away. Otherwise open a ticket (Report a player) with their username, what happened and a screenshot if you have one.", cat:"report_player" },
+      report_room:{ q:"Report a room", kw:"report room inappropriate content map",
+        a:"Open a ticket (Report a room) with the room's name and what's wrong with it — a screenshot helps a lot.", cat:"report_room" },
+      bug:{ q:"Report a bug", kw:"bug bugs glitch broken crash crashes crashing error freeze",
+        a:"Thanks — bug reports really help! Open a ticket (Bug report) saying what you did, what went wrong and where. Attach a screenshot if you can.", cat:"bug" },
+      banned:{ q:"Am I banned?", kw:"ban banned suspended suspension timeout timed out kicked appeal unban",
+        a:null, special:"ban", cat:"appeal" },
+      mic:{ q:"My mic doesn't work / mic ban", kw:"mic microphone voice muted mute talk speak hear audio",
+        a:null, special:"mic", cat:"other" },
+      screenshare:{ q:"Desktop sharing doesn't work", kw:"screen share sharing desktop stream display not supported",
+        a:"Desktop screen sharing needs the Screenshare role on your account — staff can give it to you. With it you can share in any room, and everyone in that room sees your screen. Without it the display says you don't have permission. Make sure your Campus launcher is up to date too.", cat:"bug" },
+      download:{ q:"How do I download the game?", kw:"download install get game pc quest steam launcher",
+        a:"Head to the Download page (top right) for the PC and Quest builds and the install steps.", cat:"other" },
+      website_blocked:{ q:"I can't change anything on the website", kw:"website cant can't change save blocked settings profile error",
+        a:null, special:"ban", cat:"appeal" },
+      discord:{ q:"Where's the Discord?", kw:"discord server community chat link",
+        a:"Join the Campus Discord: "+DISCORD, cat:"other" },
+    };
+    const TREE = {
+      root:{ bot:["Hi! I'm Vanessa, the Campus support assistant.","Pick a topic, or type your question below."], options:[
+        {label:"Logging in & my account",to:"account"},{label:"Joining friends & invites",to:"join"},
+        {label:"Currency, rewards & gift boxes",to:"econ"},{label:"Bans, mic bans & appeals",to:"mod"},
+        {label:"Report a player, room or bug",to:"report"},{label:"Something else",to:"other"} ]},
+      account:{ bot:["Account & login — pick one:"], options:["make_account","cant_login","forgot_pw","change_name",{label:"← Back",to:"root"}] },
+      join:{ bot:["Joining & invites — pick one:"], options:["join_friend","invites","change_rooms",{label:"← Back",to:"root"}] },
+      econ:{ bot:["Currency, rewards & gift boxes — pick one:"], options:["reward","giftbox","balance",{label:"← Back",to:"root"}] },
+      mod:{ bot:["Bans, mic bans & appeals — pick one:"], options:["banned","mic","website_blocked",{label:"← Back",to:"root"}] },
+      report:{ bot:["Reporting — pick one:"], options:["report_player","report_room","bug",{label:"← Back",to:"root"}] },
+      other:{ bot:["Here are a few more — or open a ticket for anything else."], options:["screenshare","download","discord",{label:"Open a ticket",ticket:"other"},{label:"← Back",to:"root"}] },
+    };
+
+    let engaged=false;
+    const scrollChat = () => { if(engaged) window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'}); };
+    function botSay(lines, then){ const t=el('div','msg bot'); t.appendChild(el('span','typing','<span></span><span></span><span></span>')); chat.appendChild(t); scrollChat();
+      setTimeout(()=>{ t.remove(); (Array.isArray(lines)?lines:[lines]).forEach(x=>{ if(x instanceof Node) chat.appendChild(x); else { const m=el('div','msg bot'); m.textContent=x; chat.appendChild(m); } }); scrollChat(); then&&then(); },420); }
+    function meSay(x){ const m=el('div','msg me'); m.textContent=x; chat.appendChild(m); scrollChat(); }
+    function choiceRow(opts){ const w=el('div','msg bot'), c=el('div','choices'); w.style.cssText='background:transparent;border:none;padding:0;max-width:100%';
+      opts.forEach(o=>{ const b=el('button','choice'+(o.cls?' '+o.cls:''),esc(o.label)); b.onclick=()=>{ engaged=true; o.run(); }; c.appendChild(b); });
+      w.appendChild(c); chat.appendChild(w); scrollChat(); }
+
+    function renderNode(id){ const node=TREE[id]; if(!node)return;
+      botSay(node.bot, ()=>choiceRow(node.options.map(o=>{
+        if(typeof o==='string'){ const f=FAQ[o]; return {label:f.q, run:()=>{ meSay(f.q); answer(o); }}; }
+        if(o.ticket) return {label:o.label, cls:'primary', run:()=>{ meSay(o.label); openTicketModal(o.ticket); }};
+        return {label:o.label, cls:o.to==='root'?'ghost':'', run:()=>{ meSay(o.label); renderNode(o.to); }};
+      }))); }
+
+    // The ban / mic-ban answers read the signed-in player's real status.
+    function statusCard(){
+      const r=state.role;
+      if(!r||!r.signedIn) return null;
+      const lines=[];
+      if(r.ban) lines.push('<b>Your account is banned '+(r.ban.permanent?'permanently':'for another '+esc(span(r.ban.remainingSeconds)))+'.</b>'+(r.ban.reason?'Reason: '+esc(r.ban.reason):''));
+      if(r.micBan) lines.push('<b>Your mic is banned '+(r.micBan.permanent?'permanently':'for another '+esc(span(r.micBan.remainingSeconds)))+'.</b>Voice chat is off until it ends; you can still hear everyone and use text chat.');
+      if(!lines.length) return el('div','status-card ok','<b>Good news — your account has no active bans.</b>Nothing is restricting your account right now.');
+      return el('div','status-card bad', lines.join('<br>'));
+    }
+    function answer(key, typedQuestion){
+      const f=FAQ[key];
+      if(f.special==='ban' || f.special==='mic'){
+        const card=statusCard();
+        const r=state.role||{};
+        const text = !r.signedIn
+          ? (f.special==='mic'
+              ? "If your voice chat suddenly stopped, you may have a mic ban — the game shows it in the Moderation Notice with a countdown. Log in here to see your status."
+              : "Log in here and I can show your ban status. A banned account can still sign in to the website to read things and appeal, but can't change anything until the ban ends.")
+          : (f.special==='mic'
+              ? (r.micBan ? "A mic ban switches voice chat off for its duration. It lifts on its own when the timer ends." : "No mic ban on your account — check your mic is selected in the game's settings and that you're not muted. Still silent? Open a bug ticket.")
+              : (r.ban ? "While banned you can read everything on the website but can't change anything. If you think the ban is a mistake, appeal it — a staff member will review it." : "If something still seems blocked, open a ticket and tell us what you tried."));
+        botSay(card?[card,text]:[text], ()=>followUp(key, typedQuestion, (r.ban||r.micBan)?{label:"Appeal it",cat:"appeal"}:null));
+        return;
+      }
+      botSay(f.a, ()=>followUp(key, typedQuestion));
+    }
+    function followUp(key, typedQuestion, primary){
+      const f=FAQ[key];
+      const opts=[];
+      if(primary) opts.push({label:primary.label, cls:'primary small', run:()=>{ meSay(primary.label); openTicketModal(primary.cat, typedQuestion); }});
+      opts.push({label:"👍 That helped", cls:'small', run:()=>{ meSay("That helped"); botSay("Great! Anything else?", ()=>renderNode('root')); }});
+      if(!primary) opts.push({label:"Still need help — open a ticket", cls:'primary small', run:()=>{ meSay("I still need help"); openTicketModal(f.cat, typedQuestion); }});
+      opts.push({label:"← Topics", cls:'ghost small', run:()=>{ meSay("Topics"); renderNode('root'); }});
+      choiceRow(opts);
+    }
+
+    // Typed questions: score each answer by the question's words. Words are compared by stem
+    // ("working" = "work", "invites" = "invite"); topic words count 3, generic ones ("working",
+    // "help", "broken") only 1, so "my mic isn't working" lands on the mic answer.
+    const STOP=new Set("i me my a an the to is it its of on in and or do does can how why what when where with for im dont not isnt cant wont doesnt anymore any just still really please".split(" "));
+    const GENERIC=new Set(["work","help","broken","problem","issue","wrong","error","fix","get","got","use","thing","stuff","game","campus"]);
+    const stem = w => { w=w.replace(/'s$/,'').replace(/'/g,''); if(w.length>5 && w.endsWith('ing')) return w.slice(0,-3); if(w.length>4 && w.endsWith('ed')) return w.slice(0,-2); if(w.length>3 && w.endsWith('s') && !w.endsWith('ss')) return w.slice(0,-1); return w; };
+    const toks = t => t.toLowerCase().replace(/[^a-z0-9' ]+/g,' ').split(/\s+/).filter(Boolean).map(stem);
+    const FAQ_TOKENS = Object.fromEntries(Object.entries(FAQ).map(([k,f])=>[k, new Set(toks(f.kw+' '+f.q))]));
+    function bestMatches(text){
+      const words=[...new Set(toks(text).filter(w=>w.length>1 && !STOP.has(w)))];
+      if(!words.length) return [];
+      return Object.keys(FAQ).map(k=>{
+        const set=FAQ_TOKENS[k]; let s=0;
+        words.forEach(w=>{ if(set.has(w)) s+= GENERIC.has(w)?1:3; else if(w.length>4 && [...set].some(x=>x.length>4 && (x.startsWith(w)||w.startsWith(x)))) s+=1; });
+        return [k,s];
+      }).filter(x=>x[1]>0).sort((a,b)=>b[1]-a[1]);
+    }
+    function ask(text){
+      text=text.trim(); if(!text) return;
+      engaged=true; meSay(text);
+      const m=bestMatches(text);
+      if(!m.length || m[0][1]<3){
+        botSay(["I'm not sure about that one — a real person can help."], ()=>choiceRow([
+          {label:"Open a ticket", cls:'primary', run:()=>{ meSay("Open a ticket"); openTicketModal('', text); }},
+          {label:"← Topics", cls:'ghost', run:()=>{ meSay("Topics"); renderNode('root'); }} ]));
+        return;
+      }
+      answer(m[0][0], text);
+      // Close runners-up are offered as "Did you mean".
+      const others=m.slice(1,3).filter(x=>x[1]>=3 && x[1]>=m[0][1]-1);
+      if(others.length) setTimeout(()=>{ const box=el('div','msg bot'); box.textContent="Or did you mean:"; chat.appendChild(box);
+        choiceRow(others.map(([k])=>({label:FAQ[k].q, cls:'small', run:()=>{ meSay(FAQ[k].q); answer(k, text); }}))); }, 900);
+    }
+    const askForm=document.getElementById('askForm');
+    askForm.addEventListener('submit', e=>{ e.preventDefault(); const i=document.getElementById('askInput'); ask(i.value); i.value=''; });
+
+    // ======================================================================================
+    // SCREENSHOTS (shared by the new-ticket form and the reply box)
+    // ======================================================================================
+    function attacher(listEl){
+      const items=[]; // {name,url,busy}
+      function draw(){ listEl.innerHTML=''; items.forEach((it,i)=>{ const d=el('div','pa'+(it.busy?' busy':''));
+        d.innerHTML=(it.preview?'<img src="'+esc(it.preview)+'" alt="">':'')+'<button type="button" aria-label="Remove">&times;</button>';
+        d.querySelector('button').onclick=()=>{ items.splice(i,1); draw(); if(it.name) fetch('/api/site/support/upload/'+encodeURIComponent(it.name),{method:'DELETE',credentials:'same-origin'}).catch(()=>{}); }; listEl.appendChild(d); }); }
+      async function add(file){
+        if(!file || !/^image\//.test(file.type)) return "Only images can be attached.";
+        if(items.length>=4) return "Up to 4 screenshots per message.";
+        if(file.size>6*1024*1024) return "That image is too big (max 6 MB).";
+        const it={busy:true, preview:URL.createObjectURL(file)}; items.push(it); draw();
+        const fd=new FormData(); fd.append('file', file, file.name||'screenshot.png');
+        try{
+          const r=await fetch('/api/site/support/upload',{method:'POST',credentials:'same-origin',body:fd});
+          const j=await r.json().catch(()=>({}));
+          if(!r.ok||!j.ok){ items.splice(items.indexOf(it),1); draw(); return (j&&j.error)||"Upload failed."; }
+          it.name=j.name; it.busy=false; draw(); return null;
+        }catch{ items.splice(items.indexOf(it),1); draw(); return "Upload failed."; }
+      }
+      return { add, names:()=>items.filter(i=>i.name).map(i=>i.name), busy:()=>items.some(i=>i.busy), clear:()=>{ items.length=0; draw(); } };
+    }
+    function pickFiles(onFile){ const i=document.createElement('input'); i.type='file'; i.accept='image/*'; i.multiple=true; i.onchange=()=>[...i.files].forEach(onFile); i.click(); }
+    function wirePaste(target, onFile){ target.addEventListener('paste', e=>{ const f=[...(e.clipboardData?.files||[])].filter(x=>/^image\//.test(x.type)); if(f.length){ e.preventDefault(); f.forEach(onFile); } }); }
+
+    // ======================================================================================
+    // NEW TICKET
+    // ======================================================================================
+    const tmodal=document.getElementById('tmodal'), scrimT=document.getElementById('scrimT'), tmBody=document.getElementById('tmBody');
+    const CATS=[
+      {v:"",label:"Choose a topic…"},
+      {v:"account",label:"Account / login issue"},
+      {v:"join",label:"Joining & invites"},
+      {v:"econ",label:"Currency, rewards & gift boxes"},
+      {v:"report_player",label:"Report a player"},
+      {v:"report_room",label:"Report a room"},
+      {v:"bug",label:"Bug report"},
+      {v:"appeal",label:"Ban appeal"},
+      {v:"other",label:"Something else"},
+    ];
+    const catLabel = v => (CATS.find(c=>c.v===v)||{label:"Something else"}).label;
+
+    // The extra fields each topic asks for. type: text | at | date ; optional defaults to required.
+    const FIELDS={
+      account:[
+        {k:"username",label:"Your account username",type:"at",ph:"your username"},
+        {k:"created",label:"When did you create your account?",type:"date",hint:"Roughly when you signed up — it helps us find your account.",optional:true},
+        {k:"lastlogin",label:"When did you last log in successfully?",type:"date",optional:true},
+      ],
+      join:[
+        {k:"target",label:"Who were you trying to join?",type:"at",ph:"their username",optional:true},
+        {k:"room",label:"Room or event name",type:"text",ph:"e.g. Crescendo",optional:true},
+      ],
+      econ:[
+        {k:"mode",label:"Which game mode or room?",type:"text",ph:"e.g. Isle of Lost Skulls",optional:true},
+        {k:"missing",label:"What reward or currency is missing?",type:"text",ph:"e.g. 100 Gold",optional:true},
+      ],
+      report_player:[
+        {k:"player",label:"Player you're reporting",type:"at",ph:"their username"},
+        {k:"where",label:"Where did it happen?",type:"text",ph:"room or game mode",optional:true},
+      ],
+      report_room:[
+        {k:"roomname",label:"Room name",type:"text",ph:"the room's name"},
+        {k:"owner",label:"Room owner",type:"at",ph:"owner's username",optional:true},
+      ],
+      bug:[
+        {k:"where",label:"Where did it happen?",type:"text",ph:"room, game mode or a menu",optional:true},
+        {k:"device",label:"PC or Quest?",type:"text",ph:"PC / Quest",optional:true},
+      ],
+      appeal:[],
+      other:[],
+    };
+    const DESC_PH={
+      appeal:"Why should the ban be lifted? Tell us what happened from your side.",
+      bug:"What did you do, what did you expect, and what happened instead?",
+      report_player:"What happened? Add screenshots if you have them.",
+    };
+
+    function fieldHTML(f){
+      const id="tf_"+f.k;
+      const lab='<label class="fl" for="'+id+'">'+f.label+(f.optional?' <span class="opt">(optional)</span>':' <span class="rq">*</span>')+'</label>';
+      let input;
+      if(f.type==='at') input='<div class="at-field"><span class="at">@</span><input id="'+id+'" maxlength="40" autocomplete="off"'+(f.ph?' placeholder="'+f.ph+'"':'')+'></div>';
+      else if(f.type==='date') input='<input class="field" id="'+id+'" type="date">';
+      else input='<input class="field" id="'+id+'" maxlength="120" autocomplete="off"'+(f.ph?' placeholder="'+f.ph+'"':'')+'>';
+      return '<div class="frow">'+lab+input+(f.hint?'<div class="fhint">'+f.hint+'</div>':'')+'</div>';
+    }
+    function renderDynFields(cat){
+      const wrap=document.getElementById('tfDyn'); if(wrap) wrap.innerHTML=(FIELDS[cat]||[]).map(fieldHTML).join('');
+      const d=document.getElementById('tfDesc'); if(d) d.placeholder=DESC_PH[cat]||"What happened? Add anything that helps us sort it out.";
+      const u=document.getElementById('tf_username'); if(u && !u.value && state.username) u.value=state.username;
+    }
+
+    function closeTicketModal(){ tmodal.classList.remove('open'); scrimT.classList.remove('open'); }
+    document.getElementById('tmClose').onclick=closeTicketModal; scrimT.onclick=closeTicketModal;
+    document.addEventListener('keydown', e=>{ if(e.key==='Escape' && tmodal.classList.contains('open')) closeTicketModal(); });
+
+    let formAtt=null;
+    function openTicketModal(presetCat, presetText){
+      if(!state.signedIn){
+        tmBody.className='modal-login';
+        tmBody.innerHTML='<p>You need to be logged in to open a ticket, so the team can reply to you here on the website.</p>'+
+          '<div class="choices"><a class="choice primary" href="/login">Log in</a><a class="choice" href="/signup">Sign up</a>'+
+          '<a class="choice" href="'+DISCORD+'" target="_blank" rel="noopener">Ask on Discord</a></div>';
+      } else if(!state.staff && state.role && state.role.openMine>=state.role.maxOpen){
+        tmBody.className='modal-login';
+        tmBody.innerHTML='<p>You already have '+state.role.maxOpen+' open tickets. Add to one of them instead, or close one you no longer need.</p>'+
+          '<div class="choices"><button class="choice primary" id="goMine">Go to My tickets</button></div>';
+        document.getElementById('goMine').onclick=()=>{ closeTicketModal(); showTab('mine'); };
+      } else {
+        tmBody.className='modal-body';
+        tmBody.innerHTML = ticketFormHTML(presetCat||"");
+        wireTicketForm(presetText);
+      }
+      tmodal.classList.add('open'); scrimT.classList.add('open');
+      const f=document.getElementById('tfTitle'); if(f) setTimeout(()=>f.focus(),60);
+    }
+
+    function ticketFormHTML(cat){
+      const opts=CATS.map(c=>'<option value="'+c.v+'"'+(c.v===cat?' selected':'')+(c.v===''?' disabled':'')+'>'+c.label+'</option>').join('');
+      return ''+
+        '<div class="frow"><label class="fl" for="tfTitle">Title <span class="rq">*</span></label>'+
+          '<input class="field" id="tfTitle" maxlength="120" placeholder="Short summary (e.g. Can\'t log in)"></div>'+
+        '<div class="frow"><label class="fl" for="tfCat">What\'s it about? <span class="rq">*</span></label>'+
+          '<select class="field" id="tfCat">'+opts+'</select></div>'+
+        '<div id="tfDyn"></div>'+
+        '<div class="frow"><label class="fl" for="tfDiscord">Discord <span class="opt">(optional)</span></label>'+
+          '<input class="field" id="tfDiscord" maxlength="60" placeholder="yourname — so we can reach you" autocomplete="off"></div>'+
+        '<div class="frow"><label class="fl" for="tfDesc">Describe the problem <span class="rq">*</span></label>'+
+          '<textarea class="field" id="tfDesc" maxlength="4000"></textarea>'+
+          '<div class="fhint">Screenshots help a lot — attach them below or paste one straight into the box.</div></div>'+
+        '<div class="frow"><div class="pending-att" id="tfAtt"></div>'+
+          '<div><button type="button" class="icon-btn-sm" id="tfAttach">📎 Add screenshots</button></div></div>'+
+        '<div class="tform-foot"><span class="note" id="tfStatus"></span>'+
+          '<button type="button" class="btn-send" id="tfSubmit">Submit ticket</button></div>';
+    }
+
+    function wireTicketForm(presetText){
+      const cat=document.getElementById('tfCat'), desc=document.getElementById('tfDesc'), status=document.getElementById('tfStatus');
+      cat.addEventListener('change', ()=>renderDynFields(cat.value));
+      renderDynFields(cat.value);
+      if(presetText){ desc.value=presetText; const t=document.getElementById('tfTitle'); if(t && presetText.length<=80) t.value=presetText; }
+      if(cat.value==='appeal'){ const t=document.getElementById('tfTitle'); if(t && !t.value) t.value="Ban appeal"; }
+      formAtt=attacher(document.getElementById('tfAtt'));
+      const addFile=async f=>{ const err=await formAtt.add(f); status.textContent=err||""; };
+      document.getElementById('tfAttach').onclick=()=>pickFiles(addFile);
+      wirePaste(desc, addFile);
+      document.getElementById('tfSubmit').onclick = submitTicket;
+      desc.addEventListener('keydown', e=>{ if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)) submitTicket(); });
+    }
+
+    async function submitTicket(){
+      const g=id=>document.getElementById(id);
+      const title=g('tfTitle').value.trim(), cat=g('tfCat').value, discord=g('tfDiscord').value.trim(), desc=g('tfDesc').value.trim();
+      const status=g('tfStatus'), btn=g('tfSubmit');
+      if(!title){ status.textContent="Please add a title."; g('tfTitle').focus(); return; }
+      if(!cat){ status.textContent="Please choose a topic."; g('tfCat').focus(); return; }
+      const extra=[];
+      for(const f of (FIELDS[cat]||[])){
+        const inp=g('tf_'+f.k); let v=(inp?inp.value:'').trim();
+        if(!v){ if(!f.optional){ status.textContent="Please fill in “"+f.label.replace(/\?$/,'')+"”."; if(inp) inp.focus(); return; } continue; }
+        if(f.type==='at') v='@'+v.replace(/^@+/,'');
+        extra.push(f.label.replace(/\?$/,'')+": "+v);
+      }
+      if(desc.length<3){ status.textContent="Please describe the problem."; g('tfDesc').focus(); return; }
+      if(formAtt && formAtt.busy()){ status.textContent="Wait for the screenshots to finish uploading."; return; }
+      const lines=["Issue type: "+catLabel(cat)].concat(extra);
+      if(discord) lines.push("Discord: "+discord);
+      const message = lines.join("\n") + "\n———\n" + desc;
+      btn.disabled=true; btn.textContent="Submitting…"; status.textContent="";
+      const res=await jpost('/api/site/support/create',{subject:title,message,category:cat,attachments:formAtt?formAtt.names():[]});
+      if(res.ok && res.body && res.body.id){
+        document.getElementById('tabMine').hidden=false;
+        closeTicketModal();
+        await refreshRole();
+        openThread(res.body.id);
+      } else {
+        btn.disabled=false; btn.textContent="Submit ticket";
+        status.textContent=(res.body&&res.body.error)||"Couldn't open the ticket. Please try again.";
+      }
+    }
+
+    document.getElementById('humanBtn').addEventListener('click', ()=>openTicketModal());
+    document.getElementById('newTicketBtn').onclick = ()=>openTicketModal();
+
+    // ======================================================================================
+    // TICKET LISTS
+    // ======================================================================================
+    function turnText(t, forStaff){
+      if(t.status!=='open') return '';
+      if(t.awaiting==='staff') return forStaff?'<span class="turn staff">Waiting on staff</span>':'<span class="turn">Waiting for staff</span>';
+      if(t.awaiting==='player') return forStaff?'<span class="turn">Waiting on player</span>':'<span class="turn player">Staff replied — your turn</span>';
+      return '';
+    }
+    function ticketRow(t, forStaff){
+      const r=el('div','trow'+(t.unread?' unread':''));
+      const meta = (forStaff?'<span class="who">@'+esc(t.username)+'</span>':'')+
+                   '<span class="chip '+esc(t.category)+'">'+esc(t.categoryLabel||'')+'</span>'+
+                   turnText(t, forStaff)+
+                   (forStaff&&t.assignedName?'<span>Claimed by @'+esc(t.assignedName)+'</span>':'')+
+                   '<span>'+esc(ago(t.updatedAt||t.createdAt))+'</span>'+
+                   '<span>'+(t.messageCount||0)+' message'+((t.messageCount===1)?'':'s')+'</span>';
+      r.innerHTML='<div class="tnum">#'+t.id+'</div>'+
+                  '<div class="tmain"><div class="tsubline"><div class="tsub">'+esc(t.subject)+'</div>'+(t.unread?'<span class="dot-new">New</span>':'')+'</div>'+
+                  '<div class="tprev">'+esc(t.lastMessage||'No messages yet')+'</div>'+
+                  '<div class="tmeta">'+meta+'</div></div>'+
+                  '<span class="badge '+esc(t.status)+'">'+esc(t.status)+'</span>';
+      r.onclick=()=>openThread(t.id);
+      return r;
+    }
+    const emptyState = (txt) =>
+      '<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>'+txt+'</div>';
+    async function loadMine(silent){
+      const list=document.getElementById('mineList'); if(!silent && !list.children.length) list.innerHTML='<div class="empty">Loading…</div>';
+      const j=await jget('/api/site/support/mine');
+      const ts=(j&&j.tickets)||[];
+      if(!ts.length){ list.innerHTML=emptyState("No tickets yet. Ask the Help assistant, or open one with New ticket."); return; }
+      const frag=document.createDocumentFragment();
+      ts.forEach(t=>frag.appendChild(ticketRow(t,false)));
+      list.replaceChildren(frag);
+    }
+
+    const staffF={ status:'open', category:'all', q:'', waiting:false, mine:false, unclaimed:false };
+    document.getElementById('staffFilter').addEventListener('click', e=>{ const b=e.target.closest('button'); if(!b)return;
+      staffF.status=b.dataset.status; document.querySelectorAll('#staffFilter button').forEach(x=>x.classList.toggle('active',x===b)); loadStaff(); });
+    document.getElementById('staffCat').innerHTML='<option value="all">All topics</option>'+CATS.filter(c=>c.v).map(c=>'<option value="'+c.v+'">'+c.label+'</option>').join('');
+    document.getElementById('staffCat').onchange=e=>{ staffF.category=e.target.value; loadStaff(); };
+    let qTimer=null;
+    document.getElementById('staffQ').addEventListener('input', e=>{ clearTimeout(qTimer); qTimer=setTimeout(()=>{ staffF.q=e.target.value.trim(); loadStaff(); },250); });
+    document.querySelectorAll('.toggle-chip[data-f]').forEach(b=>b.onclick=()=>{ const k=b.dataset.f; staffF[k]=!staffF[k];
+      if(k==='mine'&&staffF.mine){ staffF.unclaimed=false; } if(k==='unclaimed'&&staffF.unclaimed){ staffF.mine=false; }
+      document.querySelectorAll('.toggle-chip[data-f]').forEach(x=>x.classList.toggle('on',!!staffF[x.dataset.f])); loadStaff(); });
+    async function loadStaff(silent){
+      const list=document.getElementById('staffList'); if(!silent && !list.children.length) list.innerHTML='<div class="empty">Loading…</div>';
+      const p=new URLSearchParams({status:staffF.status, category:staffF.category, q:staffF.q, waiting:staffF.waiting, mine:staffF.mine, unclaimed:staffF.unclaimed});
+      const j=await jget('/api/site/support/all?'+p.toString());
+      const ts=(j&&j.tickets)||[];
+      if(!ts.length){ list.innerHTML=emptyState("No tickets match."); return; }
+      const frag=document.createDocumentFragment();
+      ts.forEach(t=>frag.appendChild(ticketRow(t,true)));
+      list.replaceChildren(frag);
+    }
+
+    // ======================================================================================
+    // THREAD
+    // ======================================================================================
+    const modal=document.getElementById('modal'), scrimM=document.getElementById('scrimM');
+    function closeModal(){ modal.classList.remove('open'); scrimM.classList.remove('open'); state.currentTicket=null; stopThreadPoll(); refreshRole(); }
+    document.getElementById('mClose').onclick=closeModal; scrimM.onclick=closeModal;
+    document.addEventListener('keydown', e=>{ if(e.key==='Escape' && modal.classList.contains('open')) closeModal(); });
+    async function openThread(id){
+      const j=await jget('/api/site/support/ticket/'+id);
+      if(!j||!j.ticket){ alert("Couldn't open that ticket."); return; }
+      renderThread(j.ticket, j.staff);
+      modal.classList.add('open'); scrimM.classList.add('open');
+      startThreadPoll(id);
+      refreshLists(); refreshRole();
+      if(typeof refreshNotifications==='function') refreshNotifications();
+    }
+
+    function sigOf(t){ const m=t.messages||[]; return t.status+'|'+m.length+'|'+(m.length?m[m.length-1].at:'')+'|'+t.assignedTo; }
+    let threadTimer=null;
+    function stopThreadPoll(){ if(threadTimer){ clearInterval(threadTimer); threadTimer=null; } }
+    function startThreadPoll(id){
+      stopThreadPoll();
+      threadTimer=setInterval(async ()=>{
+        if(!modal.classList.contains('open')){ stopThreadPoll(); return; }
+        const j=await jget('/api/site/support/ticket/'+id);
+        if(!j||!j.ticket) return;
+        if(sigOf(j.ticket)===state.threadSig) return;
+        renderThread(j.ticket, j.staff, true);
+        refreshLists();
+      }, 5000);
+    }
+    setInterval(()=>{ if(!modal.classList.contains('open')) refreshLists(); refreshRole(); }, 10000);
+
+    const initial = s => (s||'?').trim().charAt(0).toUpperCase();
+    function parseOpener(body){
+      const idx = body.indexOf('\n———');
+      if(idx<0) return null;
+      const head = body.slice(0, idx).trim();
+      const rest = body.slice(idx).replace(/^\s*———\s*/, '').trim();
+      const rows=[]; let ok=false;
+      head.split('\n').forEach(line=>{ const m=line.match(/^([^:]{1,40}):\s*(.+)$/); if(m){ ok=true; rows.push([m[1].trim(), m[2].trim()]); } });
+      return ok ? {rows, body:rest} : null;
+    }
+    function detailsHTML(rows){
+      const dl = rows.map(([k,v])=>{ const at=/^@/.test(v); return '<dt>'+esc(k)+'</dt><dd'+(at?' class="at"':'')+'>'+esc(v)+'</dd>'; }).join('');
+      return '<div class="tdetails"><div class="dh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>Ticket details</div><dl>'+dl+'</dl></div>';
+    }
+    function attHTML(list){ if(!list||!list.length) return '';
+      return '<div class="att-grid">'+list.map(u=>'<a href="'+esc(u)+'" target="_blank" rel="noopener"><img src="'+esc(u)+'" alt="Screenshot" loading="lazy"></a>').join('')+'</div>'; }
+    function msgHTML(m, bodyOverride){
+      if(m.system) return '<div class="sysmsg'+(m.internal?' internal':'')+'">'+esc(m.body)+' · '+esc(ago(m.at))+'</div>';
+      const cls = m.staff?'staff':'user';
+      const note = m.internal;
+      const av = m.avatar
+        ? '<div class="av-sm img" style="background-image:url(\''+esc(m.avatar)+'\')"></div>'
+        : '<div class="av-sm '+cls+'">'+esc(initial(m.fromName))+'</div>';
+      const body = bodyOverride!=null ? bodyOverride : m.body;
+      return '<div class="msgrow '+cls+(note?' note':'')+'">'+av+
+             '<div class="bcol"><div class="who">'+esc(m.fromName)+(m.staff?' · staff':'')+(note?' · internal note':'')+' · '+esc(ago(m.at))+'</div>'+
+             (body?'<div class="bubble '+(note?'note':cls)+'">'+esc(body)+'</div>':'')+attHTML(m.attachments)+'</div></div>';
+    }
+    function playerCard(p){
+      if(!p) return '';
+      const bits=[];
+      bits.push('<span class="pname">'+esc(p.displayName||p.username)+'<small>@'+esc(p.username)+' · id '+p.id+'</small></span>');
+      if(p.createdAt) bits.push('<span><span class="pk">Joined</span> '+esc(new Date(p.createdAt).toLocaleDateString())+'</span>');
+      bits.push('<span><span class="pk">Level</span> '+(p.level||0)+'</span>');
+      if(p.junior) bits.push('<span class="bad">Junior</span>');
+      if(p.banned) bits.push('<span class="bad">Banned '+(p.banPermanent?'permanently':esc(span(p.banRemainingSeconds))+' left')+'</span>');
+      if(p.micBanned) bits.push('<span class="bad">Mic banned '+(p.micBanPermanent?'permanently':esc(span(p.micBanRemainingSeconds))+' left')+'</span>');
+      if(!p.banned && !p.micBanned) bits.push('<span><span class="pk">Bans</span> none</span>');
+      bits.push('<span><span class="pk">Other tickets</span> '+p.otherTickets+(p.otherOpen?' ('+p.otherOpen+' open)':'')+'</span>');
+      bits.push('<a href="/user/'+encodeURIComponent(p.username)+'" target="_blank" rel="noopener">Profile ↗</a>');
+      return '<div class="pcard">'+bits.join('')+'</div>';
+    }
+
+    // Staff canned replies ({name} = the player's name).
+    const CANNED=[
+      ["Hi — thanks for reaching out!", "Hi {name}, thanks for reaching out! We're looking into this and will get back to you here."],
+      ["Need more detail", "Hi {name}, could you tell us a bit more — roughly when it happened, where (room / game mode), and a screenshot if you have one?"],
+      ["Fixed — please try again", "Hi {name}, this should be fixed now. Could you try again and let us know if it still happens?"],
+      ["Password reset", "Hi {name}, we've reset your password. Log in with the temporary password we sent you and change it in Settings → Password straight away."],
+      ["Appeal accepted", "Hi {name}, we've reviewed your appeal and lifted the ban. Please keep the Code of Conduct in mind — thanks for being patient."],
+      ["Appeal declined", "Hi {name}, we've reviewed your appeal and the ban stays in place. It will end when the timer runs out."],
+      ["Report handled", "Hi {name}, thanks for the report — we've looked into it and taken action. We can't share details about other players' accounts."],
+      ["Closing — no reply", "Hi {name}, we haven't heard back so we're closing this ticket. Reply any time to reopen it."],
+    ];
+
+    function renderThread(t, staff, keepDraft){
+      const box0=document.getElementById('mReply');
+      const draft=keepDraft&&box0?box0.value:'', wasFocused=keepDraft&&box0&&document.activeElement===box0;
+      state.currentTicket=t; state.threadStaff=staff;
+      const staffView = !!staff;
+      document.getElementById('mNum').textContent='#'+t.id;
+      document.getElementById('mTitle').textContent=t.subject;
+      document.getElementById('mSub').textContent='@'+t.username+' · '+(t.categoryLabel||'')+' · opened '+when(t.createdAt)+(t.assignedName?' · claimed by @'+t.assignedName:'');
+      const bd=document.getElementById('mBadge'); bd.hidden=false;
+      const waiting = t.status==='open' && t.awaiting==='staff';
+      bd.className='badge '+(staffView&&waiting?'waiting':t.status); bd.textContent= staffView&&waiting ? 'waiting' : t.status;
+      // claim (staff)
+      const cb=document.getElementById('mClaim');
+      if(staffView){ cb.hidden=false; const mine=t.assignedTo && t.assignedName && state.username && t.assignedName.toLowerCase()===state.username.toLowerCase();
+        cb.className='claim-btn'+(mine?' mine':''); cb.textContent= mine?'Release':(t.assignedTo?'Take over':'Claim');
+        cb.onclick=async()=>{ const r=await jpost('/api/site/support/ticket/'+t.id+'/assign',{assign:!mine}); if(r.ok&&r.body&&r.body.ticket){ renderThread(r.body.ticket,true); refreshLists(); } };
+      } else cb.hidden=true;
+
+      const th=document.getElementById('thread'); th.innerHTML='';
+      state.threadSig=sigOf(t);
+      if(staffView && t.player) th.insertAdjacentHTML('beforeend', playerCard(t.player));
+      const msgs=(t.messages||[]).slice();
+      if(msgs.length){
+        const first=msgs[0], parsed=parseOpener(first.body||'');
+        if(parsed){
+          th.insertAdjacentHTML('beforeend', detailsHTML(parsed.rows));
+          th.insertAdjacentHTML('beforeend', msgHTML(first, parsed.body));
+          msgs.shift();
+        }
+      }
+      msgs.forEach(m=> th.insertAdjacentHTML('beforeend', msgHTML(m)) );
+      th.scrollTop=th.scrollHeight;
+
+      const tg=document.getElementById('mToggle'); tg.hidden=false;
+      tg.textContent = t.status==='open' ? (staffView?'Close ticket':'Close my ticket') : 'Reopen';
+      tg.onclick = async () => { const path = t.status==='open'?'close':'reopen'; await jpost('/api/site/support/ticket/'+t.id+'/'+path); openThread(t.id); refreshLists(); };
+
+      // footer: reply box (a reply on a closed ticket reopens it)
+      const foot=document.getElementById('mFoot');
+      const tools = staffView
+        ? '<div class="foot-tools"><select class="field" id="mCanned"><option value="">Quick reply…</option>'+CANNED.map((c,i)=>'<option value="'+i+'">'+esc(c[0])+'</option>').join('')+'</select>'+
+          '<button type="button" class="icon-btn-sm" id="mNote" title="Only staff can see internal notes">🔒 Internal note</button>'+
+          '<button type="button" class="icon-btn-sm" id="mAttach">📎 Screenshot</button></div>'
+        : '<div class="foot-tools"><button type="button" class="icon-btn-sm" id="mAttach">📎 Screenshot</button>'+
+          (t.status==='closed'?'<span class="limit-note">Replying reopens this ticket.</span>':'')+'</div>';
+      foot.className='modal-foot';
+      foot.innerHTML = tools+'<div class="pending-att" id="mAtt"></div>'+
+        '<div class="row"><textarea class="field" id="mReply" placeholder="'+(t.status==='open'?'Write a reply…':'Write a reply to reopen…')+'" rows="1"></textarea><button class="btn-send" id="mSend">Send</button></div>';
+      wireSend(t, staffView);
+      const nb=document.getElementById('mReply');
+      if(draft){ nb.value=draft; } if(wasFocused){ nb.focus(); nb.selectionStart=nb.selectionEnd=nb.value.length; }
+    }
+
+    function wireSend(t, staffView){
+      const btn=document.getElementById('mSend'), box=document.getElementById('mReply'), foot=document.getElementById('mFoot');
+      const att=attacher(document.getElementById('mAtt'));
+      let noteMode=false;
+      const addFile=async f=>{ const err=await att.add(f); if(err) alert(err); };
+      document.getElementById('mAttach').onclick=()=>pickFiles(addFile);
+      wirePaste(box, addFile);
+      const nt=document.getElementById('mNote');
+      if(nt) nt.onclick=()=>{ noteMode=!noteMode; nt.classList.toggle('on',noteMode); foot.classList.toggle('note-mode',noteMode);
+        box.placeholder=noteMode?'Internal note — only staff will see this':'Write a reply…'; btn.textContent=noteMode?'Add note':'Send'; };
+      const cn=document.getElementById('mCanned');
+      if(cn) cn.onchange=()=>{ const c=CANNED[+cn.value]; if(c){ box.value=c[1].replace(/\{name\}/g, t.username); box.focus(); } cn.value=''; };
+      const send = async () => {
+        const v=box.value.trim(); if(!v && !att.names().length) return;
+        if(att.busy()){ alert("Wait for the screenshots to finish uploading."); return; }
+        btn.disabled=true;
+        const res=await jpost('/api/site/support/ticket/'+t.id+'/reply',{message:v, internal:noteMode, attachments:att.names()});
+        btn.disabled=false;
+        if(res.ok && res.body && res.body.ticket){ renderThread(res.body.ticket,res.body.staff); refreshLists(); }
+        else alert((res.body&&res.body.error)||"Couldn't send that - please try again.");
+      };
+      btn.onclick=send;
+      box.addEventListener('keydown', e=>{ if(e.key==='Enter' && (e.ctrlKey||e.metaKey)){ e.preventDefault(); send(); } });
+    }
+    function refreshLists(){ if(document.getElementById('panel-mine').classList.contains('active')) loadMine(true);
+      if(document.getElementById('panel-staff').classList.contains('active')) loadStaff(true); }
+
+    // Tab counters: unread replies on My tickets, tickets waiting on staff for All tickets.
+    async function refreshRole(){
+      const r=await jget('/api/site/support/role'); if(!r) return;
+      state.role=r;
+      const mp=document.getElementById('minePill');
+      if(r.unreadMine>0){ mp.hidden=false; mp.textContent=r.unreadMine; } else mp.hidden=true;
+      if(r.staff){ const p=document.getElementById('openPill'); if(r.awaitingStaff>0){ p.hidden=false; p.textContent=r.awaitingStaff; } else p.hidden=true; }
+    }
+
+    // ---------- deep links ----------
+    // /support/ticket/{id} -> open that thread ; /support/logs -> staff "All tickets"
+    function handleDeepLink(){
+      const path = (window.location.pathname||"").replace(/\/+$/,"");
+      const m = path.match(/\/support\/ticket\/(\d+)$/i);
+      if(m){ if(state.signedIn) showTab(state.staff?'staff':'mine'); openThread(parseInt(m[1],10)); return; }
+      if(/\/support\/logs$/i.test(path)){
+        if(state.staff){ staffF.waiting=true; document.querySelector('.toggle-chip[data-f="waiting"]').classList.add('on'); showTab('staff'); }
+        else if(state.signedIn) showTab('mine');
+      }
+      const q=new URLSearchParams(location.search);
+      if(q.get('new')){ openTicketModal(q.get('new')); }
+    }
+
+    // ---------- boot ----------
+    (async function(){
+      renderNode('root');
+      await refreshRole();
+      const role=state.role;
+      if(role){ state.signedIn=!!role.signedIn; state.staff=!!role.staff; state.username=role.username||"";
+        if(state.signedIn) document.getElementById('tabMine').hidden=false;
+        if(state.staff) document.getElementById('tabStaff').hidden=false;
+      }
+      handleDeepLink();
+    })();
+  })();
+  </script>
+</body>
+</html>
